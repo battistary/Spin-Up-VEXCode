@@ -52,18 +52,17 @@ void pre_auton(void) {
   vexcodeInit();
   leftEncoder.setPosition(0, degrees);
   rightEncoder.setPosition(0, degrees);
+  backEncoder.setPosition(0, degrees);
 }
 
 /*---------------------------------------------------------------------------*/
-/*                                 Baseline PID                              */
+/*                            Baseline PD Controller                         */
 /*---------------------------------------------------------------------------*/
 
 // Settings - TUNE TO OUR ROBOT
 double kP = 0.0;
-double kI = 0.0;
 double kD = 0.0;
 double turnkP = 0.0;
-double turnkI = 0.0;
 double turnkD = 0.0;
 
 // Autonomous settings
@@ -83,7 +82,7 @@ int turnTotalError = 0; //totalError = totalError + error (integral)
 bool resetDriveSensors = false;
 bool enabledrivePID = false;
 
-int drivePID() { // not in use - trying to integrate code here into odometry code
+int drivePID() {
 
   while(enabledrivePID){
 
@@ -95,6 +94,7 @@ int drivePID() { // not in use - trying to integrate code here into odometry cod
       backRight.setPosition(0, degrees);
       leftEncoder.setPosition(0, degrees);
       rightEncoder.setPosition(0, degrees);
+      backEncoder.setPosition(0, degrees);
     }
 
     //Get the position of the motors
@@ -111,21 +111,18 @@ int drivePID() { // not in use - trying to integrate code here into odometry cod
     /*******************************************/
     
     // Get average of the two motors
-    int averagePosition = (leftEncoderPosition + rightEncoderPosition)/2;
+    int averagePosition = (leftEncoderPosition + rightEncoderPosition) / 2;
     
     // Potential
     error = (desiredValue*49.8637150129) - averagePosition;
 
     // Derivative
     derivative = error - prevError;
-    
-    // Integral
-    totalError += error;
 
-    double LateralMotorPower = (error*kP + derivative*kD + totalError*kI)/12.0;
+    double LateralMotorPower = (error * kP + derivative * kD) / 12.0;
 
     /*******************************************/
-    /*          Turning Movement PID           */
+    /*          Turning Movement PD            */
     /*******************************************/
 
     // Get average of the two motors
@@ -136,13 +133,10 @@ int drivePID() { // not in use - trying to integrate code here into odometry cod
 
     // Derivative
     turnDerivative = turnError - turnPrevError;
-    
-    // Integral
-    turnTotalError += turnError;
 
     /////////////////////////////////////////////
 
-    double TurnMotorPower = (turnError*turnkP + turnDerivative*turnkD + turnTotalError*turnkI)/12.0;
+    double TurnMotorPower = (turnError * turnkP + turnDerivative * turnkD) / 12.0;
     
     frontLeft.spin(forward, LateralMotorPower + TurnMotorPower, voltageUnits::volt);
     frontRight.spin(forward, LateralMotorPower - TurnMotorPower, voltageUnits::volt);
@@ -238,12 +232,11 @@ void turnLeft(double inches, rotationUnits degrees, double velocity, percentUnit
 void autonomous(void) {
   
   // Match Autonomous
-  //setup stuff
+  // Set motor velocities
   flywheel.setVelocity(3600, rpm);
   intake.setVelocity(100, percent);
-  intake.setVelocity(100, percent);
 
-  //beginning of auton task
+  // Beginning of autonomous task
   driveForward(9, degrees, 10, pct);
   turnLeft(90, degrees, 10, pct);
   driveBackward(2.2, degrees, 20, pct);
