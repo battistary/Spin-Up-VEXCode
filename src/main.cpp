@@ -97,12 +97,7 @@ int drivePID() {
       backEncoder.setPosition(0, degrees);
     }
 
-    //Get the position of the motors
-    int frontLeftMotorPosition = frontLeft.position(degrees);
-    int frontRightMotorPosition = frontRight.position(degrees);
-    int backLeftMotorPosition = backLeft.position(degrees);
-    int backRightMotorPosition = backRight.position(degrees);
-
+    // Get the positions of the shaft encoders
     int leftEncoderPosition = leftEncoder.position(degrees);
     int rightEncoderPosition = rightEncoder.position(degrees);
 
@@ -110,7 +105,7 @@ int drivePID() {
     /*          Lateral Movement PID           */
     /*******************************************/
     
-    // Get average of the two motors
+    // Get average of the two shaft encoders
     int averagePosition = (leftEncoderPosition + rightEncoderPosition) / 2;
     
     // Potential
