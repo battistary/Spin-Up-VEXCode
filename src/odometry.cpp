@@ -1,3 +1,6 @@
+// Not in use until back tracking wheel + shaft encoder addition
+// Plan - Keep PID functions in main.cpp & fetch odom data from here
+//
 ///*----------------------------------------------------------------------------*/
 ///*                                                                            */
 ///*    Module:       odometry.cpp                                              */
