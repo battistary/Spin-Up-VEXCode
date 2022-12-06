@@ -10,21 +10,20 @@
 // ---- START VEXCODE CONFIGURED DEVICES ----
 // Robot Configuration:
 // [Name]               [Type]        [Port(s)]
-// frontLeft            motor         11              
-// backLeft             motor         12              
-// frontRight           motor         1               
-// backRight            motor         2               
 // Controller1          controller                    
+// Controller2          controller                    
+// driveLeftFront       motor         11              
+// driveLeftCenter      motor         4               
+// driveLeftBack        motor         12              
+// driveRightFront      motor         1               
+// driveRightCenter     motor         5               
+// driveRightBack       motor         2               
+// intake               motor         3               
+// flywheel             motor         15              
 // leftEncoder          encoder       A, B            
 // rightEncoder         encoder       C, D            
 // backEncoder          encoder       E, F            
-// flywheel             motor         15              
-// Controller2          controller                    
-// StringLauncherG      digital_out   G               
-// intake               motor         3               
-// leftMiddle           motor         4               
-// rightMiddle          motor         5               
-// GPS                  gps           6               
+// stringLauncher       digital_out   G               
 // ---- END VEXCODE CONFIGURED DEVICES ----
 
 #include "vex.h"
@@ -88,10 +87,10 @@ int drivePID() {
 
     if (resetDriveSensors){
       resetDriveSensors = false;
-      frontLeft.setPosition(0, degrees);
-      frontRight.setPosition(0, degrees);
-      backLeft.setPosition(0, degrees);
-      backRight.setPosition(0, degrees);
+      driveLeftFront.setPosition(0, degrees);
+      driveRightFront.setPosition(0, degrees);
+      driveLeftBack.setPosition(0, degrees);
+      driveRightBack.setPosition(0, degrees);
       leftEncoder.setPosition(0, degrees);
       rightEncoder.setPosition(0, degrees);
       backEncoder.setPosition(0, degrees);
@@ -133,10 +132,10 @@ int drivePID() {
 
     double TurnMotorPower = (turnError * turnkP + turnDerivative * turnkD) / 12.0;
     
-    frontLeft.spin(forward, LateralMotorPower + TurnMotorPower, voltageUnits::volt);
-    frontRight.spin(forward, LateralMotorPower - TurnMotorPower, voltageUnits::volt);
-    backLeft.spin(forward, LateralMotorPower + TurnMotorPower, voltageUnits::volt);
-    backRight.spin(forward, LateralMotorPower - TurnMotorPower, voltageUnits::volt);
+    driveLeftFront.spin(forward, LateralMotorPower + TurnMotorPower, voltageUnits::volt);
+    driveRightFront.spin(forward, LateralMotorPower - TurnMotorPower, voltageUnits::volt);
+    driveLeftBack.spin(forward, LateralMotorPower + TurnMotorPower, voltageUnits::volt);
+    driveRightBack.spin(forward, LateralMotorPower - TurnMotorPower, voltageUnits::volt);
 
     prevError = error;
     turnPrevError = turnError;
@@ -152,66 +151,66 @@ return 0;
 
 // Drive Forward 
 void driveForward(double inches, rotationUnits degrees, double velocity, percentUnits pct) {
-  frontLeft.setVelocity(velocity, percent);
-  frontRight.setVelocity(velocity, percent);
-  backLeft.setVelocity(velocity, percent);
-  backRight.setVelocity(velocity, percent);
-  leftMiddle.setVelocity(velocity, percent);
-  rightMiddle.setVelocity(velocity, percent);
-  frontLeft.spinFor(forward, inches*49.8637150129, degrees, false); 
-  frontRight.spinFor(forward, inches*49.8637150129, degrees, false); 
-  backLeft.spinFor(forward, inches*49.8637150129, degrees, false); 
-  backRight.spinFor(forward, inches*49.8637150129, degrees, false);
-  leftMiddle.spinFor(forward, inches*49.8637150129, degrees, false);
-  rightMiddle.spinFor(forward, inches*49.8637150129, degrees, true);
+  driveLeftFront.setVelocity(velocity, percent);
+  driveRightFront.setVelocity(velocity, percent);
+  driveLeftBack.setVelocity(velocity, percent);
+  driveRightBack.setVelocity(velocity, percent);
+  driveLeftCenter.setVelocity(velocity, percent);
+  driveRightCenter.setVelocity(velocity, percent);
+  driveLeftFront.spinFor(forward, inches*49.8637150129, degrees, false); 
+  driveRightFront.spinFor(forward, inches*49.8637150129, degrees, false); 
+  driveLeftBack.spinFor(forward, inches*49.8637150129, degrees, false); 
+  driveRightBack.spinFor(forward, inches*49.8637150129, degrees, false);
+  driveLeftCenter.spinFor(forward, inches*49.8637150129, degrees, false);
+  driveRightCenter.spinFor(forward, inches*49.8637150129, degrees, true);
 }
  
 // Drive Backward
 void driveBackward(double inches, rotationUnits degrees, double velocity, percentUnits pct) {
-  frontLeft.setVelocity(velocity, percent);
-  frontRight.setVelocity(velocity, percent);
-  backLeft.setVelocity(velocity, percent);
-  backRight.setVelocity(velocity, percent);
-  leftMiddle.setVelocity(velocity, percent);
-  rightMiddle.setVelocity(velocity, percent);
-  frontLeft.spinFor(reverse, inches*49.8637150129, degrees, false); 
-  frontRight.spinFor(reverse, inches*49.8637150129, degrees, false); 
-  backLeft.spinFor(reverse, inches*49.8637150129, degrees, false); 
-  backRight.spinFor(reverse, inches*49.8637150129, degrees, false);
-  leftMiddle.spinFor(reverse, inches*49.8637150129, degrees, false);
-  rightMiddle.spinFor(reverse, inches*49.8637150129, degrees, true);
+  driveLeftFront.setVelocity(velocity, percent);
+  driveRightFront.setVelocity(velocity, percent);
+  driveLeftBack.setVelocity(velocity, percent);
+  driveRightBack.setVelocity(velocity, percent);
+  driveLeftCenter.setVelocity(velocity, percent);
+  driveRightCenter.setVelocity(velocity, percent);
+  driveLeftFront.spinFor(reverse, inches*49.8637150129, degrees, false); 
+  driveRightFront.spinFor(reverse, inches*49.8637150129, degrees, false); 
+  driveLeftBack.spinFor(reverse, inches*49.8637150129, degrees, false); 
+  driveRightBack.spinFor(reverse, inches*49.8637150129, degrees, false);
+  driveLeftCenter.spinFor(reverse, inches*49.8637150129, degrees, false);
+  driveRightCenter.spinFor(reverse, inches*49.8637150129, degrees, true);
 }
 
 // Turn right
 void turnRight(double inches, rotationUnits degrees, double velocity, percentUnits pct) {
-  frontLeft.setVelocity(velocity, percent);
-  frontRight.setVelocity(velocity, percent);
-  backLeft.setVelocity(velocity, percent);
-  backRight.setVelocity(velocity, percent);
-  leftMiddle.setVelocity(velocity, percent);
-  rightMiddle.setVelocity(velocity, percent);
-  frontLeft.spinFor(forward, inches*49.8637150129, degrees, false); 
-  frontRight.spinFor(reverse, inches*49.8637150129, degrees, false); 
-  backLeft.spinFor(forward, inches*49.8637150129, degrees, false); 
-  backRight.spinFor(reverse, inches*49.8637150129, degrees, false);
-  leftMiddle.spinFor(forward, inches*49.8637150129, degrees, false);
-  rightMiddle.spinFor(reverse, inches*49.8637150129, degrees, true);
+  driveLeftFront.setVelocity(velocity, percent);
+  driveRightFront.setVelocity(velocity, percent);
+  driveLeftBack.setVelocity(velocity, percent);
+  driveRightBack.setVelocity(velocity, percent);
+  driveLeftCenter.setVelocity(velocity, percent);
+  driveRightCenter.setVelocity(velocity, percent);
+  driveLeftFront.spinFor(forward, inches*49.8637150129, degrees, false); 
+  driveRightFront.spinFor(reverse, inches*49.8637150129, degrees, false); 
+  driveLeftBack.spinFor(forward, inches*49.8637150129, degrees, false); 
+  driveRightBack.spinFor(reverse, inches*49.8637150129, degrees, false);
+  driveLeftCenter.spinFor(forward, inches*49.8637150129, degrees, false);
+  driveRightCenter.spinFor(reverse, inches*49.8637150129, degrees, true);
 }
 
 // Turn left
 void turnLeft(double inches, rotationUnits degrees, double velocity, percentUnits pct) {
-  frontLeft.setVelocity(velocity, percent);
-  frontRight.setVelocity(velocity, percent);
-  backLeft.setVelocity(velocity, percent);
-  backRight.setVelocity(velocity, percent);
-  leftMiddle.setVelocity(velocity, percent);
-  rightMiddle.setVelocity(velocity, percent);
-  frontLeft.spinFor(reverse, inches*49.8637150129, degrees, false); 
-  frontRight.spinFor(forward, inches*49.8637150129, degrees, false); 
-  backLeft.spinFor(reverse, inches*49.8637150129, degrees, false); 
-  backRight.spinFor(forward, inches*49.8637150129, degrees, false);
-  leftMiddle.spinFor(reverse, inches*49.8637150129, degrees, false);
-  rightMiddle.spinFor(forward, inches*49.8637150129, degrees, true);
+  driveLeftFront.setVelocity(velocity, percent);
+  driveRightFront.setVelocity(velocity, percent);
+  driveLeftBack.setVelocity(velocity, percent);
+  driveRightBack.setVelocity(velocity, percent);
+  driveLeftCenter.setVelocity(velocity, percent);
+  driveRightCenter.setVelocity(velocity, percent);
+  driveLeftFront.spinFor(reverse, inches*49.8637150129, degrees, false); 
+  driveRightFront.spinFor(forward, inches*49.8637150129, degrees, false); 
+  driveLeftBack.spinFor(reverse, inches*49.8637150129, degrees, false); 
+  driveRightBack.spinFor(forward, inches*49.8637150129, degrees, false);
+  driveLeftCenter.spinFor(reverse, inches*49.8637150129, degrees, false);
+  driveRightCenter.spinFor(forward, inches*49.8637150129, degrees, true);
 }
 
 /*---------------------------------------------------------------------------*/
@@ -243,7 +242,7 @@ void autonomous(void) {
   
   // Skills Autonomous (40 + 12 + points from string launcher)
   //setup stuff
-  StringLauncherG.set(true);
+  stringLauncher.set(true);
   flywheel.setVelocity(3600, rpm);
   intake.setVelocity(100, percent);
   intake.setVelocity(100, percent);
@@ -268,7 +267,7 @@ void autonomous(void) {
   turnRight(45, degrees, 10, pct);
   driveForward(15, degrees, 30, pct);
   turnLeft(90, degrees, 10, pct);
-  StringLauncherG.set(false);
+  stringLauncher.set(false);
   
   /*
   intake.spinFor(forward, 999, turns, false);
@@ -353,16 +352,16 @@ void usercontrol(void) {
     }
 
     // String Launcher Piston
-    StringLauncherG.set(true);
+    stringLauncher.set(true);
     if (Controller2.ButtonA.pressing()) {
-      StringLauncherG.set(false);
+      stringLauncher.set(false);
     }
 
     // Define joystick control
-    frontLeft.spin(vex::directionType::fwd, (Controller1.Axis3.value() + Controller1.Axis1.value() + Controller1.Axis4.value()), vex::velocityUnits::pct);
-    frontRight.spin(vex::directionType::fwd, (Controller1.Axis3.value() - Controller1.Axis1.value() - Controller1.Axis4.value()), vex::velocityUnits::pct);
-    backLeft.spin(vex::directionType::fwd, (Controller1.Axis3.value() + Controller1.Axis1.value() - Controller1.Axis4.value()), vex::velocityUnits::pct);
-    backRight.spin(vex::directionType::fwd, (Controller1.Axis3.value() - Controller1.Axis1.value() + Controller1.Axis4.value()), vex::velocityUnits::pct);
+    driveLeftFront.spin(vex::directionType::fwd, (Controller1.Axis3.value() + Controller1.Axis1.value() + Controller1.Axis4.value()), vex::velocityUnits::pct);
+    driveRightFront.spin(vex::directionType::fwd, (Controller1.Axis3.value() - Controller1.Axis1.value() - Controller1.Axis4.value()), vex::velocityUnits::pct);
+    driveLeftBack.spin(vex::directionType::fwd, (Controller1.Axis3.value() + Controller1.Axis1.value() - Controller1.Axis4.value()), vex::velocityUnits::pct);
+    driveRightBack.spin(vex::directionType::fwd, (Controller1.Axis3.value() - Controller1.Axis1.value() + Controller1.Axis4.value()), vex::velocityUnits::pct);
 
     wait(20, msec);
   }
