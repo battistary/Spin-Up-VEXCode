@@ -372,13 +372,15 @@ void usercontrol(void) {
     int turn = controller1.Axis1.position();
     int left = power + turn;
     int right = power - turn;
+    int leftVolts = 12.0 * (left / 100.0);
+    int rightVolts = 12.0 * (right / 100.0);
     
-    driveLeftBack.spin(forward, left, percent);
-    driveLeftCenter.spin(forward, left, percent);
-    driveLeftFront.spin(forward, left, percent);
-    driveRightBack.spin(forward, right, percent);
-    driveRightCenter.spin(forward, right, percent);
-    driveRightFront.spin(forward, right, percent);
+    driveLeftBack.spin(forward, leftVolts, volt);
+    driveLeftCenter.spin(forward, leftVolts, volt);
+    driveLeftFront.spin(forward, leftVolts, volt);
+    driveRightBack.spin(forward, rightVolts, volt);
+    driveRightCenter.spin(forward, rightVolts, volt);
+    driveRightFront.spin(forward, rightVolts, volt);
     wait(10, msec);
   }
 
