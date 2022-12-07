@@ -49,9 +49,24 @@ competition Competition;
 void pre_auton(void) {
   // Initializing Robot Configuration. DO NOT REMOVE!
   vexcodeInit();
+
   leftEncoder.setPosition(0, degrees);
   rightEncoder.setPosition(0, degrees);
   backEncoder.setPosition(0, degrees);
+
+  driveLeftBack.setBrake(breakType, coast);
+  driveLeftCenter.setBrake(breakType, coast);
+  driveLeftFront.setBrake(breakType, coast);
+
+  driveRightBack.setBrake(breakType, coast);
+  driveRightCenter.setBrake(breakType, coast);
+  driveRightFront.setBrake(breakType, coast);
+
+  intake.setBrake(breakType, break);
+  flywheel.setBrake(breakType, coast);
+
+  stringLauncher.set(0);
+  bool launchString = true;
 }
 
 /*---------------------------------------------------------------------------*/
@@ -242,7 +257,6 @@ void autonomous(void) {
   
   // Skills Autonomous (40 + 12 + points from string launcher)
   //setup stuff
-  stringLauncher.set(true);
   flywheel.setVelocity(3600, rpm);
   intake.setVelocity(100, percent);
   intake.setVelocity(100, percent);
@@ -267,7 +281,7 @@ void autonomous(void) {
   turnRight(45, degrees, 10, pct);
   driveForward(15, degrees, 30, pct);
   turnLeft(90, degrees, 10, pct);
-  stringLauncher.set(false);
+  launchString = true;
   
   /*
   intake.spinFor(forward, 999, turns, false);
@@ -312,24 +326,21 @@ void usercontrol(void) {
   while (1) {
     // Set motor velocities
     flywheel.setVelocity(3600, rpm);
-    intake.setVelocity(100, percent);
-    intake.setVelocity(100, percent);
+    intake.setVelocity(80, percent);
 
     // Define button press actions
-    // Intake
+    // Intake / Roller-Roller
     if (Controller1.ButtonL1.pressing()){
-      intake.setVelocity(80, percent);
       intake.spin(forward);
     }
     else if (Controller1.ButtonL2.pressing()){
-      intake.setVelocity(80,percent);
       intake.spin(reverse);
     }
     else {
       intake.stop();
     }
 
-    // flywheel
+    // Flywheel
     if (Controller1.ButtonR1.pressing()){
       flywheel.spin(forward);
     }
@@ -340,30 +351,32 @@ void usercontrol(void) {
       flywheel.stop();
     }
 
-    // Roller-Roller
-    if (Controller1.ButtonUp.pressing()){
-      intake.spin(forward);
-    }
-    else if (Controller1.ButtonDown.pressing()){
-      intake.spin(reverse);
-    }
-    else {
-      intake.stop();
-    }
-
     // String Launcher Piston
-    stringLauncher.set(true);
-    if (Controller2.ButtonA.pressing()) {
-      stringLauncher.set(false);
+    if (Controller1.ButtonA.pressing()) {
+      if (launchString) {
+        stringLauncher.set(1);
+        launchString = false;
+        wait(10, msec);
+      }
+      else {
+        stringLauncher.set(0);
+        launchString = true;
+        wait(10, msec);
     }
 
     // Define joystick control
-    driveLeftFront.spin(vex::directionType::fwd, (Controller1.Axis3.value() + Controller1.Axis1.value() + Controller1.Axis4.value()), vex::velocityUnits::pct);
-    driveRightFront.spin(vex::directionType::fwd, (Controller1.Axis3.value() - Controller1.Axis1.value() - Controller1.Axis4.value()), vex::velocityUnits::pct);
-    driveLeftBack.spin(vex::directionType::fwd, (Controller1.Axis3.value() + Controller1.Axis1.value() - Controller1.Axis4.value()), vex::velocityUnits::pct);
-    driveRightBack.spin(vex::directionType::fwd, (Controller1.Axis3.value() - Controller1.Axis1.value() + Controller1.Axis4.value()), vex::velocityUnits::pct);
-
-    wait(20, msec);
+    int power = controller1.Axis3.position();
+    int turn = controller1.Axis1.position();
+    int left = power + turn;
+    int right = power - turn;
+    
+    driveLeftBack.spin(forward, left, percent);
+    driveLeftCenter.spin(forward, left, percent);
+    driveLeftFront.spin(forward, left, percent);
+    driveRightBack.spin(forward, right, percent);
+    driveRightCenter.spin(forward, right, percent);
+    driveRighttFront.spin(forward, right, percent);
+    wait(10, msec);
   }
 
 }
