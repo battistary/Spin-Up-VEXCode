@@ -10,8 +10,8 @@
 // ---- START VEXCODE CONFIGURED DEVICES ----
 // Robot Configuration:
 // [Name]               [Type]        [Port(s)]
-// Controller1          controller                    
-// Controller2          controller                    
+// controller1          controller                    
+// controller2          controller                    
 // driveLeftFront       motor         11              
 // driveLeftCenter      motor         4               
 // driveLeftBack        motor         12              
@@ -54,19 +54,18 @@ void pre_auton(void) {
   rightEncoder.setPosition(0, degrees);
   backEncoder.setPosition(0, degrees);
 
-  driveLeftBack.setBrake(breakType, coast);
-  driveLeftCenter.setBrake(breakType, coast);
-  driveLeftFront.setBrake(breakType, coast);
+  driveLeftBack.setBrake(coast);
+  driveLeftCenter.setBrake(coast);
+  driveLeftFront.setBrake(coast);
 
-  driveRightBack.setBrake(breakType, coast);
-  driveRightCenter.setBrake(breakType, coast);
-  driveRightFront.setBrake(breakType, coast);
+  driveRightBack.setBrake(coast);
+  driveRightCenter.setBrake(coast);
+  driveRightFront.setBrake(coast);
 
-  intake.setBrake(breakType, break);
-  flywheel.setBrake(breakType, coast);
+  intake.setBrake(brake);
+  flywheel.setBrake(coast);
 
   stringLauncher.set(0);
-  bool launchString = true;
 }
 
 /*---------------------------------------------------------------------------*/
@@ -281,7 +280,7 @@ void autonomous(void) {
   turnRight(45, degrees, 10, pct);
   driveForward(15, degrees, 30, pct);
   turnLeft(90, degrees, 10, pct);
-  launchString = true;
+  stringLauncher.set(1);
   
   /*
   intake.spinFor(forward, 999, turns, false);
@@ -323,6 +322,9 @@ void usercontrol(void) {
   // User control code
   enabledrivePID = false;
   
+  stringLauncher.set(0);
+  bool launchString = true;
+  
   while (1) {
     // Set motor velocities
     flywheel.setVelocity(3600, rpm);
@@ -330,10 +332,10 @@ void usercontrol(void) {
 
     // Define button press actions
     // Intake / Roller-Roller
-    if (Controller1.ButtonL1.pressing()){
+    if (controller1.ButtonL1.pressing()){
       intake.spin(forward);
     }
-    else if (Controller1.ButtonL2.pressing()){
+    else if (controller1.ButtonL2.pressing()){
       intake.spin(reverse);
     }
     else {
@@ -341,10 +343,10 @@ void usercontrol(void) {
     }
 
     // Flywheel
-    if (Controller1.ButtonR1.pressing()){
+    if (controller1.ButtonR1.pressing()){
       flywheel.spin(forward);
     }
-    else if (Controller1.ButtonR2.pressing()){
+    else if (controller1.ButtonR2.pressing()){
       flywheel.spin(reverse);
     }
     else {
@@ -352,7 +354,7 @@ void usercontrol(void) {
     }
 
     // String Launcher Piston
-    if (Controller1.ButtonA.pressing()) {
+    if (controller1.ButtonA.pressing()) {
       if (launchString) {
         stringLauncher.set(1);
         launchString = false;
@@ -362,6 +364,7 @@ void usercontrol(void) {
         stringLauncher.set(0);
         launchString = true;
         wait(10, msec);
+      }
     }
 
     // Define joystick control
@@ -375,7 +378,7 @@ void usercontrol(void) {
     driveLeftFront.spin(forward, left, percent);
     driveRightBack.spin(forward, right, percent);
     driveRightCenter.spin(forward, right, percent);
-    driveRighttFront.spin(forward, right, percent);
+    driveRightFront.spin(forward, right, percent);
     wait(10, msec);
   }
 
