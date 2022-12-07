@@ -15,6 +15,9 @@ extern motor driveRightBack;
 extern motor intake;
 extern motor flywheel;
 
+extern motor_group driveLeft;
+extern motor_group driveRight;
+
 extern encoder leftEncoder;
 extern encoder rightEncoder;
 extern encoder backEncoder;

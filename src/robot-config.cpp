@@ -19,6 +19,8 @@ motor driveRightCenter = motor(PORT5, ratio6_1, false);
 motor driveRightBack = motor(PORT2, ratio6_1, false);
 motor intake = motor(PORT3, ratio6_1, false);
 motor flywheel = motor(PORT15, ratio6_1, true);
+motor_group driveLeft(driveLeftFront, driveLeftCenter, driveLeftBack);
+motor_group driveRight(driveRightFront, driveRightCenter, driveRightBack);
 
 encoder leftEncoder = encoder(Brain.ThreeWirePort.A);
 encoder rightEncoder = encoder(Brain.ThreeWirePort.C);
