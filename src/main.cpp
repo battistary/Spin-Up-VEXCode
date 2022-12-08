@@ -18,7 +18,7 @@
 // driveRightFront      motor         1
 // driveRightCenter     motor         5
 // driveRightBack       motor         2
-// intake               motor         3
+// intake               motor         18
 // flywheel             motor         15
 // driveLeft            motor_group
 // driveRight           motor_group
