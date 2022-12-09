@@ -29,7 +29,6 @@
 // ---- END VEXCODE CONFIGURED DEVICES ----
 
 #include "vex.h"
-#include "logo.h"
 
 using namespace vex;
 
@@ -51,6 +50,8 @@ competition Competition;
 void pre_auton(void) {
   // Initializing Robot Configuration. DO NOT REMOVE!
   vexcodeInit();
+
+  Brain.Screen.drawImageFromFile("brain_logo.png", 0, 0);
 
   leftEncoder.setPosition(0, degrees);
   rightEncoder.setPosition(0, degrees);
@@ -294,7 +295,7 @@ void usercontrol(void) {
   while (1) {
     // Set motor velocities
     flywheel.setVelocity(3600, rpm);
-    intake.setVelocity(80, percent);
+    intake.setVelocity(100, percent);
 
     // Define button press actions
     // Intake / Roller-Roller
@@ -354,7 +355,6 @@ int main() {
   // Set up callbacks for autonomous and driver control periods.
   Competition.autonomous(autonomous);
   Competition.drivercontrol(usercontrol);
-  Brain.Screen.drawImageFromBuffer(image, 0, 0, sizeof(image));
   
   // Run the pre-autonomous function.
   pre_auton();
