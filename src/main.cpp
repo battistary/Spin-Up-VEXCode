@@ -65,7 +65,7 @@ void pre_auton(void) {
   driveRightCenter.setBrake(coast);
   driveRightFront.setBrake(coast);
 
-  intake.setBrake(brake);
+  intake.setBrake(coast);
   flywheel.setBrake(coast);
 
   stringLauncher.set(0);
@@ -159,7 +159,7 @@ return 0;
 }
 
 /*---------------------------------------------------------------------------*/
-/*                             Driving Functions                             */
+/*                           Auton Driving Functions                         */
 /*---------------------------------------------------------------------------*/
 
 // Drive Forward 
@@ -195,6 +195,43 @@ void turnLeft(double inches, rotationUnits degrees, double velocity, percentUnit
 }
 
 /*---------------------------------------------------------------------------*/
+/*                             Autonomous Selector                           */
+/*---------------------------------------------------------------------------*/
+
+int autonToRun = 0;
+
+class Button
+{
+  public:
+    int x, y, width, height;
+    std::string text;
+    vex::color buttonColor, textColor;
+    
+    Button(int x, int y, int width, int height, std::string text, vex::color buttonColor, vex::color textColor)
+    : x(x), y(y), width(width), height(height), text(text), buttonColor(buttonColor), textColor(textColor){}
+
+    void render()
+    {
+      Brain.Screen.drawRectangle(x, y, width, height, buttonColor);
+      Brain.Screen.printAt(x + 10, y + 10, false, text.c_str());
+    }
+
+    bool isClicked()
+    {
+      if(Brain.Screen.pressing() && Brain.Screen.xPosition() >= x && Brain.Screen.xPosition() <= x + width &&
+      Brain.Screen.yPosition() >= y && Brain.Screen.yPosition() <= y + width) return true;
+      return false;
+    }
+};
+
+Button autonButtons[] = {
+  Button(10, 10, 150, 50, "Auton Red (NOT CODED)", vex::green, vex::black),
+  Button(170, 10, 150, 50, "Auton Red 2 (NOT CODED)", vex::white, vex::black),
+  Button(10, 70, 150, 50, "Auton Blue 1 (NOT CODED)", vex::white, vex::black),
+  Button(170, 70, 150, 50, "Skills", vex::white, vex::black)
+};
+
+/*---------------------------------------------------------------------------*/
 /*                                                                           */
 /*                              Autonomous Task                              */
 /*                                                                           */
@@ -205,74 +242,60 @@ void turnLeft(double inches, rotationUnits degrees, double velocity, percentUnit
 /*---------------------------------------------------------------------------*/
 
 void autonomous(void) {
-  
-  // Match Autonomous
   // Set motor velocities
   flywheel.setVelocity(3600, rpm);
   intake.setVelocity(100, percent);
+  stringLauncher.set(0);
 
-  // Beginning of autonomous task
-  driveForward(9, degrees, 10, pct);
-  turnLeft(90, degrees, 10, pct);
-  driveBackward(2.2, degrees, 20, pct);
-  wait(1, sec);
-  intake.spinFor(forward, 0.3, turns);
-  wait(1, sec);
-  driveForward(2, degrees, 10, pct);
+  if (autonToRun == 4) {
+    // Skills Autonomous (40 + 12 + points from string launcher)
+    //beginning of auton task (in school starts under roller along front-right wall when looking at field from our table)
+    intake.spinFor(forward, 2, turns);
+    driveForward(15, degrees, 30, pct);
+    turnRight(90, degrees, 10, pct);
+    driveBackward(5, degrees, 60, pct);
+    intake.spinFor(reverse, 2, turns);
+    driveForward(15, degrees, 30, pct);
+    turnLeft(45, degrees, 10, pct);
+    driveForward(40, degrees, 30, pct);
+    turnLeft(135, degrees, 10, pct);
+    driveBackward(5, degrees, 60, pct);
+    intake.spinFor(reverse, 2, turns);
+    driveForward(15, degrees, 30, pct);
+    turnRight(90, degrees, 10, pct);
+    driveBackward(5, degrees, 60, pct);
+    intake.spinFor(forward, 2, turns);
+    driveForward(15, degrees, 30, pct);
+    turnRight(45, degrees, 10, pct);
+    driveForward(15, degrees, 30, pct);
+    turnLeft(90, degrees, 10, pct);
+    stringLauncher.set(1);
+    
+    /*
+    intake.spinFor(forward, 999, turns, false);
+    driveForward(41, degrees, 60, pct);
+    turnRight(90, degrees, 60, pct);
+    intake.stop();
+    driveBackward(41, degrees, 60, pct);
+    intake.spinFor(forward, 2, turns);
 
-  
-  // Skills Autonomous (40 + 12 + points from string launcher)
-  //setup stuff
-  flywheel.setVelocity(3600, rpm);
-  intake.setVelocity(100, percent);
-  intake.setVelocity(100, percent);
+    */
+    
+    
+    /* Comment out all auton PID code for now
+    enabledrivePID = true;
+    vex::task AutonomousDrive(drivePID);
 
-  //beginning of auton task
-  intake.spinFor(forward, 2, turns);
-  driveForward(15, degrees, 30, pct);
-  turnRight(90, degrees, 10, pct);
-  driveBackward(5, degrees, 60, pct);
-  intake.spinFor(reverse, 2, turns);
-  driveForward(15, degrees, 30, pct);
-  turnLeft(45, degrees, 10, pct);
-  driveForward(40, degrees, 30, pct);
-  turnLeft(135, degrees, 10, pct);
-  driveBackward(5, degrees, 60, pct);
-  intake.spinFor(reverse, 2, turns);
-  driveForward(15, degrees, 30, pct);
-  turnRight(90, degrees, 10, pct);
-  driveBackward(5, degrees, 60, pct);
-  intake.spinFor(forward, 2, turns);
-  driveForward(15, degrees, 30, pct);
-  turnRight(45, degrees, 10, pct);
-  driveForward(15, degrees, 30, pct);
-  turnLeft(90, degrees, 10, pct);
-  stringLauncher.set(1);
-  
-  /*
-  intake.spinFor(forward, 999, turns, false);
-  driveForward(41, degrees, 60, pct);
-  turnRight(90, degrees, 60, pct);
-  intake.stop();
-  driveBackward(41, degrees, 60, pct);
-  intake.spinFor(forward, 2, turns);
+    resetDriveSensors = true;
+    desiredValue = 300;
+    desiredTurnValue = 600;
 
-  */
-  
-  
-  /* Comment out all auton PID code for now
-  enabledrivePID = true;
-  vex::task AutonomousDrive(drivePID);
+    vex::task::sleep(1000);
 
-  resetDriveSensors = true;
-  desiredValue = 300;
-  desiredTurnValue = 600;
-
-  vex::task::sleep(1000);
-
-  resetDriveSensors = true;
-  desiredValue = 300;
-  desiredTurnValue = 300; */
+    resetDriveSensors = true;
+    desiredValue = 300;
+    desiredTurnValue = 300; */
+  }
 }
 
 /*---------------------------------------------------------------------------*/
@@ -293,9 +316,10 @@ void usercontrol(void) {
   bool launchString = true;
   
   while (1) {
-    // Set motor velocities
+    // Initialize devices
     flywheel.setVelocity(3600, rpm);
     intake.setVelocity(100, percent);
+    Brain.Screen.clearScreen(vex::white);
 
     // Define button press actions
     // Intake / Roller-Roller
@@ -334,6 +358,21 @@ void usercontrol(void) {
       }
     }
 
+    // Render autonomous selector on brain
+    if (!Competition.isEnabled()) {
+      for(int i = 0; i < 4; i++) {
+        autonButtons[i].render();
+        if(autonButtons[i].isClicked()) {
+          autonButtons[autonToRun].buttonColor = vex::white;
+          autonButtons[i].buttonColor = vex::green;
+          autonToRun = i;
+        }
+      }
+    }
+    else {
+      Brain.Screen.drawImageFromFile("brain_logo.png", 0, 0);
+    }
+
     // Define joystick control
     int power = controller1.Axis3.position();
     int turn = controller1.Axis1.position();
@@ -344,6 +383,7 @@ void usercontrol(void) {
     
     driveLeft.spin(forward, leftVolts, volt);
     driveRight.spin(forward, rightVolts, volt);
+    Brain.Screen.render();
     wait(10, msec);
   }
 
