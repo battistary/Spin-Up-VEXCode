@@ -252,6 +252,9 @@ void autonomous(void) {
   if (autonToRun == 3) {
     // Skills Autonomous (40 + 12 + points from string launcher)
     //beginning of auton task (in school starts under roller along front-right wall when looking at field from our table)
+
+    Brain.Screen.print("Skills auton working!");
+    /*
     intake.spinFor(forward, 2, turns);
     driveForward(15, degrees, 30, pct);
     turnRight(90, degrees, 10, pct);
@@ -272,6 +275,7 @@ void autonomous(void) {
     driveForward(15, degrees, 30, pct);
     turnLeft(90, degrees, 10, pct);
     stringLauncher.set(1);
+    */
     
     /*
     intake.spinFor(forward, 999, turns, false);

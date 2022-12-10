@@ -11,14 +11,14 @@ brain Brain;
 controller controller1 = controller(primary);
 controller controller2 = controller(partner);
 
-motor driveLeftFront = motor(PORT11, ratio6_1, true);
-motor driveLeftCenter = motor(PORT4, ratio6_1, true);
-motor driveLeftBack = motor(PORT3, ratio6_1, true);
-motor driveRightFront = motor(PORT1, ratio6_1, false);
-motor driveRightCenter = motor(PORT5, ratio6_1, false);
-motor driveRightBack = motor(PORT2, ratio18_1, false);
-motor intake = motor(PORT19, ratio6_1, false);
-motor flywheel = motor(PORT15, ratio6_1, true);
+motor driveLeftFront = motor(PORT5, ratio6_1, true);
+motor driveLeftCenter = motor(PORT6, ratio6_1, true);
+motor driveLeftBack = motor(PORT7, ratio6_1, true);
+motor driveRightFront = motor(PORT10, ratio6_1, false);
+motor driveRightCenter = motor(PORT9, ratio6_1, false);
+motor driveRightBack = motor(PORT8, ratio18_1, false);
+motor intake = motor(PORT11, ratio6_1, false);
+motor flywheel = motor(PORT1, ratio6_1, true);
 motor_group driveLeft(driveLeftFront, driveLeftCenter, driveLeftBack);
 motor_group driveRight(driveRightFront, driveRightCenter, driveRightBack);
 
