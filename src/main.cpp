@@ -333,10 +333,10 @@ void usercontrol(void) {
     // Define button press actions
     // Intake / Roller-Roller
     if (controller1.ButtonL1.pressing()){
-      intake.spin(forward);
+      intake.spin(reverse);
     }
     else if (controller1.ButtonL2.pressing()){
-      intake.spin(reverse);
+      intake.spin(forward);
     }
     else {
       intake.stop();
