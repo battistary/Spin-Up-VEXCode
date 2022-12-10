@@ -167,7 +167,7 @@ void driveForward(double inches, rotationUnits degrees, double velocity, percent
   driveLeft.setVelocity(velocity, percent);
   driveRight.setVelocity(velocity, percent);
   driveLeft.spinFor(forward, inches * 49.8637150129, degrees, false); 
-  driveRight.spinFor(forward, inches * 49.8637150129, degrees, true);
+  driveRight.spinFor(forward, inches * 49.8637150129, degrees, false);
 }
  
 // Drive Backward
@@ -175,7 +175,7 @@ void driveBackward(double inches, rotationUnits degrees, double velocity, percen
   driveLeft.setVelocity(velocity, percent);
   driveRight.setVelocity(velocity, percent);
   driveLeft.spinFor(reverse, inches * 49.8637150129, degrees, false); 
-  driveRight.spinFor(reverse, inches * 49.8637150129, degrees, true);
+  driveRight.spinFor(reverse, inches * 49.8637150129, degrees, false);
 }
 
 // Turn right
@@ -183,7 +183,7 @@ void turnRight(double inches, rotationUnits degrees, double velocity, percentUni
   driveLeft.setVelocity(velocity, percent);
   driveRight.setVelocity(velocity, percent);
   driveLeft.spinFor(forward, inches * 49.8637150129, degrees, false); 
-  driveRight.spinFor(reverse, inches * 49.8637150129, degrees, true);
+  driveRight.spinFor(reverse, inches * 49.8637150129, degrees, false);
 }
 
 // Turn left
@@ -191,7 +191,7 @@ void turnLeft(double inches, rotationUnits degrees, double velocity, percentUnit
   driveLeft.setVelocity(velocity, percent);
   driveRight.setVelocity(velocity, percent);
   driveLeft.spinFor(reverse, inches * 49.8637150129, degrees, false); 
-  driveRight.spinFor(forward, inches * 49.8637150129, degrees, true);
+  driveRight.spinFor(forward, inches * 49.8637150129, degrees, false);
 }
 
 /*---------------------------------------------------------------------------*/
@@ -252,7 +252,9 @@ void autonomous(void) {
   if (autonToRun == 1 || autonToRun == 2 || autonToRun == 3) {
     // Auton to run when anything but skills
 
-    intake.spinFor(forward, 2, turns);
+    driveBackward(5, degrees, 60, pct);
+    wait(1000, msec);
+    intake.spinFor(forward, 1.5, turns);
   }
 
   if (autonToRun == 4) {
@@ -305,6 +307,11 @@ void autonomous(void) {
     resetDriveSensors = true;
     desiredValue = 300;
     desiredTurnValue = 300; */
+  }
+  else {
+    driveBackward(5, degrees, 60, pct);
+    wait(1000, msec);
+    intake.spinFor(forward, 1.5, turns);
   }
 }
 
@@ -369,11 +376,17 @@ void usercontrol(void) {
     double turn = controller1.Axis1.position();
     double left = power + turn;
     double right = power - turn;
-    double leftVolts = 12.0 * (left / 100.0);
-    double rightVolts = 12.0 * (right / 100.0);
+    // double leftVolts = 12.0 * (left / 100.0);
+    // double rightVolts = 12.0 * (right / 100.0);
     
-    driveLeft.spin(forward, leftVolts, volt);
-    driveRight.spin(forward, rightVolts, volt);
+    // Volts (right motors to spin at higer voltage than left for some reason)
+    //driveLeft.spin(forward, leftVolts, voltageUnits::volt);
+    //driveRight.spin(forward, rightVolts, voltageUnits::volt);
+
+    // Percent
+    driveLeft.spin(directionType::fwd, left, percentUnits::pct);
+    driveRight.spin(directionType::fwd, right, percentUnits::pct);
+
     wait(10, msec);
   }
 
