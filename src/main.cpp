@@ -248,8 +248,14 @@ void autonomous(void) {
   flywheel.setVelocity(3600, rpm);
   intake.setVelocity(100, percent);
   stringLauncher.set(0);
+  
+  if (autonToRun == 1 || autonToRun == 2 || autonToRun == 3) {
+    // Auton to run when anything but skills
 
-  if (autonToRun == 3) {
+    intake.spinFor(forward, 2, turns);
+  }
+
+  if (autonToRun == 4) {
     // Skills Autonomous (40 + 12 + points from string launcher)
     //beginning of auton task (in school starts under roller along front-right wall when looking at field from our table)
 
@@ -340,9 +346,6 @@ void usercontrol(void) {
     if (controller1.ButtonR1.pressing()){
       flywheel.spin(forward);
     }
-    else if (controller1.ButtonR2.pressing()){
-      flywheel.spin(reverse);
-    }
     else {
       flywheel.stop();
     }
@@ -396,7 +399,7 @@ int main() {
         if(autonButtons[i].isClicked()) {
           autonButtons[autonToRun].buttonColor = unpressedColors[autonToRun];
           autonButtons[i].buttonColor = 0x00FF00;
-          autonToRun = i;
+          autonToRun = i + 1;
         }
       }
     }
