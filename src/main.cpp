@@ -82,23 +82,23 @@ double turnkP = 0.0;
 double turnkD = 0.0;
 
 // Autonomous settings
-int desiredValue = 200;
-int desiredTurnValue = 0;
+double desiredValue = 200;
+double desiredTurnValue = 0;
 
-int error; // SensorValue - DesiredValue : position
-int prevError = 0; // error 20 milliseconds ago
-int derivative; // error - prevError (speed)
-int totalError = 0; //totalError = totalError + error (integral)
+double error; // SensorValue - DesiredValue : position
+double prevError = 0; // error 20 milliseconds ago
+double derivative; // error - prevError (speed)
+double totalError = 0; //totalError = totalError + error (integral)
 
-int turnError; //SensorValue - DesiredValue : position
-int turnPrevError = 0; // error 20 milliseconds ago
-int turnDerivative; // error - prevError (speed)
-int turnTotalError = 0; //totalError = totalError + error (integral)
+double turnError; //SensorValue - DesiredValue : position
+double turnPrevError = 0; // error 20 milliseconds ago
+double turnDerivative; // error - prevError (speed)
+double turnTotalError = 0; //totalError = totalError + error (integral)
 
 bool resetDriveSensors = false;
 bool enabledrivePID = false;
 
-int drivePID() {
+double drivePID() {
 
   while(enabledrivePID){
 
@@ -112,18 +112,18 @@ int drivePID() {
     }
 
     // Get the positions of the shaft encoders
-    int leftEncoderPosition = leftEncoder.position(degrees);
-    int rightEncoderPosition = rightEncoder.position(degrees);
+    double leftEncoderPosition = leftEncoder.position(degrees);
+    double rightEncoderPosition = rightEncoder.position(degrees);
 
     /*******************************************/
     /*          Lateral Movement PID           */
     /*******************************************/
     
     // Get average of the two shaft encoders
-    int averagePosition = (leftEncoderPosition + rightEncoderPosition) / 2;
+    double averagePosition = (leftEncoderPosition + rightEncoderPosition) / 2;
     
     // Potential
-    error = (desiredValue*49.8637150129) - averagePosition;
+    error = (desiredValue * 49.8637150129) - averagePosition;
 
     // Derivative
     derivative = error - prevError;
@@ -135,10 +135,10 @@ int drivePID() {
     /*******************************************/
 
     // Get average of the two motors
-    int turnDifference = leftEncoderPosition - rightEncoderPosition;
+    double turnDifference = leftEncoderPosition - rightEncoderPosition;
     
     // Potential
-    turnError = ((desiredTurnValue/360)*3.256*360) - turnDifference;
+    turnError = ((desiredTurnValue / 360) * 3.256 * 360) - turnDifference;
 
     // Derivative
     turnDerivative = turnError - turnPrevError;
@@ -225,11 +225,13 @@ class Button
 };
 
 Button autonButtons[] = {
-  Button(10, 10, 150, 50, "Auton Red (NOT CODED)", vex::green, vex::black),
-  Button(170, 10, 150, 50, "Auton Red 2 (NOT CODED)", vex::white, vex::black),
-  Button(10, 70, 150, 50, "Auton Blue 1 (NOT CODED)", vex::white, vex::black),
-  Button(170, 70, 150, 50, "Skills", vex::white, vex::black)
+  Button(10, 10, 150, 50, "(NOT CODED)", 0xFF0000, 0xFFFFFF),
+  Button(170, 10, 150, 50, "(NOT CODED)", 0xFFA500, 0xFFFFFF),
+  Button(10, 70, 150, 50, "(NOT CODED)", 0x0000FF, 0xFFFFFF),
+  Button(170, 70, 150, 50, "Skills", 0xFF00FF, 0xFFFFFF)
 };
+
+vex::color unpressedColors[4] = {0xFF0000, 0xFFA500, 0x0000FF, 0xFF00FF};
 
 /*---------------------------------------------------------------------------*/
 /*                                                                           */
@@ -247,7 +249,7 @@ void autonomous(void) {
   intake.setVelocity(100, percent);
   stringLauncher.set(0);
 
-  if (autonToRun == 4) {
+  if (autonToRun == 3) {
     // Skills Autonomous (40 + 12 + points from string launcher)
     //beginning of auton task (in school starts under roller along front-right wall when looking at field from our table)
     intake.spinFor(forward, 2, turns);
@@ -319,7 +321,6 @@ void usercontrol(void) {
     // Initialize devices
     flywheel.setVelocity(3600, rpm);
     intake.setVelocity(100, percent);
-    Brain.Screen.clearScreen(vex::white);
 
     // Define button press actions
     // Intake / Roller-Roller
@@ -358,32 +359,16 @@ void usercontrol(void) {
       }
     }
 
-    // Render autonomous selector on brain
-    if (!Competition.isEnabled()) {
-      for(int i = 0; i < 4; i++) {
-        autonButtons[i].render();
-        if(autonButtons[i].isClicked()) {
-          autonButtons[autonToRun].buttonColor = vex::white;
-          autonButtons[i].buttonColor = vex::green;
-          autonToRun = i;
-        }
-      }
-    }
-    else {
-      Brain.Screen.drawImageFromFile("brain_logo.png", 0, 0);
-    }
-
     // Define joystick control
-    int power = controller1.Axis3.position();
-    int turn = controller1.Axis1.position();
-    int left = power + turn;
-    int right = power - turn;
-    int leftVolts = 12.0 * (left / 100.0);
-    int rightVolts = 12.0 * (right / 100.0);
+    double power = controller1.Axis3.position();
+    double turn = controller1.Axis1.position();
+    double left = power + turn;
+    double right = power - turn;
+    double leftVolts = 12.0 * (left / 100.0);
+    double rightVolts = 12.0 * (right / 100.0);
     
     driveLeft.spin(forward, leftVolts, volt);
     driveRight.spin(forward, rightVolts, volt);
-    Brain.Screen.render();
     wait(10, msec);
   }
 
@@ -401,6 +386,22 @@ int main() {
 
   // Prevent main from exiting with an infinite loop.
   while (true) {
+
+    // Render autonomous selector on brain
+    if (!Competition.isEnabled()) {
+      for(int i = 0; i < 4; i++) {
+        autonButtons[i].render();
+        if(autonButtons[i].isClicked()) {
+          autonButtons[autonToRun].buttonColor = unpressedColors[autonToRun];
+          autonButtons[i].buttonColor = 0x00FF00;
+          autonToRun = i;
+        }
+      }
+    }
+    else {
+      Brain.Screen.drawImageFromFile("brain_logo.png", 0, 0);
+    }
+    
     wait(100, msec);
   }
 }
