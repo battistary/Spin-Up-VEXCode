@@ -58,17 +58,26 @@ void pre_auton(void) {
   backEncoder.setPosition(0, degrees);
 
   driveLeftBack.setBrake(coast);
+  driveLeftBack.setTimeout(5, seconds);
   driveLeftCenter.setBrake(coast);
+  driveLeftCenter.setTimeout(5, seconds);
   driveLeftFront.setBrake(coast);
+  driveLeftFront.setTimeout(5, seconds);
 
   driveRightBack.setBrake(coast);
+  driveRightBack.setTimeout(5, seconds);
   driveRightCenter.setBrake(coast);
+  driveRightCenter.setTimeout(5, seconds);
   driveRightFront.setBrake(coast);
+  driveRightFront.setTimeout(5, seconds);
 
   intake.setBrake(coast);
   flywheel.setBrake(coast);
 
   stringLauncher.set(0);
+
+  driveRightCenter.setTimeout(3, seconds);
+  driveRightBack.setTimeout(3, seconds);
 }
 
 /*---------------------------------------------------------------------------*/
@@ -163,35 +172,35 @@ return 0;
 /*---------------------------------------------------------------------------*/
 
 // Drive Forward 
-void driveForward(double inches, rotationUnits degrees, double velocity, percentUnits pct) {
+void driveForward(double inches, rotationUnits turns, double velocity, percentUnits pct) {
   driveLeft.setVelocity(velocity, percent);
   driveRight.setVelocity(velocity, percent);
-  driveLeft.spinFor(forward, inches * 49.8637150129, degrees, false); 
-  driveRight.spinFor(forward, inches * 49.8637150129, degrees, false);
+  driveLeft.spinFor(forward, inches / (2.75 * M_PI) / (4/3), turns, false);
+  driveRight.spinFor(forward, inches / (2.75 * M_PI) / (4/3), turns, true);
 }
- 
+
 // Drive Backward
-void driveBackward(double inches, rotationUnits degrees, double velocity, percentUnits pct) {
+void driveBackward(double inches, rotationUnits turns, double velocity, percentUnits pct) {
   driveLeft.setVelocity(velocity, percent);
   driveRight.setVelocity(velocity, percent);
-  driveLeft.spinFor(reverse, inches * 49.8637150129, degrees, false); 
-  driveRight.spinFor(reverse, inches * 49.8637150129, degrees, false);
+  driveLeft.spinFor(reverse, inches / (2.75 * M_PI) / (4/3), turns, false);
+  driveRight.spinFor(reverse, inches / (2.75 * M_PI) / (4/3), turns, true);
 }
 
 // Turn right
-void turnRight(double inches, rotationUnits degrees, double velocity, percentUnits pct) {
+void turnRight(double degrees, rotationUnits turns, double velocity, percentUnits pct) {
   driveLeft.setVelocity(velocity, percent);
   driveRight.setVelocity(velocity, percent);
-  driveLeft.spinFor(forward, inches * 49.8637150129, degrees, false); 
-  driveRight.spinFor(reverse, inches * 49.8637150129, degrees, false);
+  driveLeft.spinFor(forward, degrees * 0.0479722222222222, turns, false);
+  driveRight.spinFor(reverse, degrees * 0.0479722222222222, turns, true);
 }
 
 // Turn left
-void turnLeft(double inches, rotationUnits degrees, double velocity, percentUnits pct) {
+void turnLeft(double degrees, rotationUnits turns, double velocity, percentUnits pct) {
   driveLeft.setVelocity(velocity, percent);
   driveRight.setVelocity(velocity, percent);
-  driveLeft.spinFor(reverse, inches * 49.8637150129, degrees, false); 
-  driveRight.spinFor(forward, inches * 49.8637150129, degrees, false);
+  driveLeft.spinFor(forward, degrees * 0.0479722222222222, turns, false);
+  driveRight.spinFor(reverse, degrees * 0.0479722222222222, turns, true);
 }
 
 /*---------------------------------------------------------------------------*/
@@ -252,43 +261,38 @@ void autonomous(void) {
   if (autonToRun == 1 || autonToRun == 2 || autonToRun == 3) {
     // Auton to run when anything but skills
 
-    driveBackward(5, degrees, 60, pct);
-    wait(1000, msec);
-    intake.spinFor(forward, 1.5, turns);
+    intake.spinFor(forward, 180, degrees);
   }
 
   if (autonToRun == 4) {
     // Skills Autonomous (40 + 12 + points from string launcher)
     //beginning of auton task (in school starts under roller along front-right wall when looking at field from our table)
 
-    intake.spinFor(forward, 2, turns);
-    driveForward(15, degrees, 30, pct);
-    turnRight(90, degrees, 10, pct);
-    driveBackward(5, degrees, 60, pct);
+    intake.spinFor(forward, 180, degrees);
+    driveForward(19, turns, 60, pct);
+    turnRight(90, turns, 60, pct);
+    driveBackward(19, turns, 60, pct);
     intake.spinFor(reverse, 2, turns);
-    driveForward(15, degrees, 30, pct);
-    turnLeft(45, degrees, 10, pct);
-    driveForward(40, degrees, 30, pct);
-    turnLeft(135, degrees, 10, pct);
-    driveBackward(5, degrees, 60, pct);
-    intake.spinFor(reverse, 2, turns);
-    driveForward(15, degrees, 30, pct);
-    turnRight(90, degrees, 10, pct);
-    driveBackward(5, degrees, 60, pct);
-    intake.spinFor(forward, 2, turns);
-    driveForward(15, degrees, 30, pct);
-    turnRight(45, degrees, 10, pct);
-    driveForward(15, degrees, 30, pct);
-    turnLeft(90, degrees, 10, pct);
-    stringLauncher.set(1);
 
+    intake.spin(forward);
+    driveForward(79, turns, 30, pct);
+    turnLeft(90, turns, 10, pct);
+    driveForward(24, turns, 30, pct);
+    intake.stop();
+    turnLeft(45, turns, 10, pct);
+    flywheel.spin(forward);
+    wait(2, seconds);
+    intake.spin(reverse);
+    wait(2, seconds);
+    intake.stop();
+    stringLauncher.set(1);
     
     /*
     intake.spinFor(forward, 999, turns, false);
-    driveForward(41, degrees, 60, pct);
-    turnRight(90, degrees, 60, pct);
+    driveForward(41, turns, 60, pct);
+    turnRight(90, turns, 60, pct);
     intake.stop();
-    driveBackward(41, degrees, 60, pct);
+    driveBackward(41, turns, 60, pct);
     intake.spinFor(forward, 2, turns);
 
     */
@@ -309,9 +313,8 @@ void autonomous(void) {
     desiredTurnValue = 300; */
   }
   else {
-    driveBackward(5, degrees, 60, pct);
-    wait(1000, msec);
-    intake.spinFor(forward, 1.5, turns);
+    // Autonomous to run when no autonomous is selected on brain
+    intake.spinFor(forward, 180, degrees);
   }
 }
 
@@ -371,21 +374,26 @@ void usercontrol(void) {
       }
     }
 
+    // One tile drive function test
+    if (controller1.ButtonRight.pressing()) {
+      driveForward(24, turns, 60, pct);
+    }
+
+    // 90 Degree turn function test
+    if (controller1.ButtonLeft.pressing()) {
+      turnLeft(90, turns, 60, pct);
+    }
+
     // Define joystick control
     double power = controller1.Axis3.position();
     double turn = controller1.Axis1.position();
     double left = power + turn;
     double right = power - turn;
-    // double leftVolts = 12.0 * (left / 100.0);
-    // double rightVolts = 12.0 * (right / 100.0);
-    
-    // Volts (right motors to spin at higer voltage than left for some reason)
-    //driveLeft.spin(forward, leftVolts, voltageUnits::volt);
-    //driveRight.spin(forward, rightVolts, voltageUnits::volt);
+    double leftVolts = 12.0 * (left / 100.0);
+    double rightVolts = 12.0 * (right / 100.0);
 
-    // Percent
-    driveLeft.spin(directionType::fwd, left, percentUnits::pct);
-    driveRight.spin(directionType::fwd, right, percentUnits::pct);
+    driveLeft.spin(forward, leftVolts, voltageUnits::volt);
+    driveRight.spin(forward, rightVolts, voltageUnits::volt);
 
     wait(10, msec);
   }
