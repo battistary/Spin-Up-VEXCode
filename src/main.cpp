@@ -191,16 +191,16 @@ void driveBackward(double inches, rotationUnits turns, double velocity, percentU
 void turnRight(double degrees, rotationUnits turns, double velocity, percentUnits pct) {
   driveLeft.setVelocity(velocity, percent);
   driveRight.setVelocity(velocity, percent);
-  driveLeft.spinFor(forward, degrees * 0.0479722222222222, turns, false);
-  driveRight.spinFor(reverse, degrees * 0.0479722222222222, turns, true);
+  driveLeft.spinFor(forward, (degrees * 0.0479722222222222) / (2.75 * M_PI) / (4/3), turns, false);
+  driveRight.spinFor(reverse, (degrees * 0.0479722222222222) / (2.75 * M_PI) / (4/3), turns, true);
 }
 
 // Turn left
 void turnLeft(double degrees, rotationUnits turns, double velocity, percentUnits pct) {
   driveLeft.setVelocity(velocity, percent);
   driveRight.setVelocity(velocity, percent);
-  driveLeft.spinFor(forward, degrees * 0.0479722222222222, turns, false);
-  driveRight.spinFor(reverse, degrees * 0.0479722222222222, turns, true);
+  driveLeft.spinFor(forward, (degrees * 0.0479722222222222) / (2.75 * M_PI) / (4/3), turns, false);
+  driveRight.spinFor(reverse, (degrees * 0.0479722222222222) / (2.75 * M_PI) / (4/3), turns, true);
 }
 
 /*---------------------------------------------------------------------------*/
