@@ -275,11 +275,11 @@ void autonomous(void) {
     intake.spinFor(reverse, 2, turns);
 
     intake.spin(forward);
-    driveForward(79, turns, 30, pct);
+    driveForward(79, turns, 60, pct);
     turnLeft(90, turns, 10, pct);
-    driveForward(24, turns, 30, pct);
+    driveForward(24, turns, 60, pct);
     intake.stop();
-    turnLeft(45, turns, 10, pct);
+    turnLeft(45, turns, 60, pct);
     flywheel.spin(forward);
     wait(2, seconds);
     intake.spin(reverse);
@@ -375,14 +375,14 @@ void usercontrol(void) {
     }
 
     // One tile drive function test
-    if (controller1.ButtonRight.pressing()) {
-      driveForward(24, turns, 60, pct);
-    }
+    //if (controller1.ButtonRight.pressing()) {
+    //  driveForward(24, turns, 60, pct);
+    //}
 
     // 90 Degree turn function test
-    if (controller1.ButtonLeft.pressing()) {
-      turnLeft(90, turns, 60, pct);
-    }
+    //if (controller1.ButtonLeft.pressing()) {
+    //  turnLeft(90, turns, 60, pct);
+    //}
 
     // Define joystick control
     double power = controller1.Axis3.position();
