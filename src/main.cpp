@@ -234,13 +234,12 @@ class Button
 };
 
 Button autonButtons[] = {
-  Button(10, 10, 150, 50, "(NOT CODED)", 0xFF0000, 0xFFFFFF),
-  Button(170, 10, 150, 50, "(NOT CODED)", 0xFFA500, 0xFFFFFF),
-  Button(10, 70, 150, 50, "(NOT CODED)", 0x0000FF, 0xFFFFFF),
-  Button(170, 70, 150, 50, "Skills", 0xFF00FF, 0xFFFFFF)
+  Button(10, 10, 150, 50, "Left Match (AWP)", 0xFF0000, 0xFFFFFF),
+  Button(170, 10, 150, 50, "RM (NOT CODED)", 0x0000FF, 0xFFFFFF),
+  Button(10, 70, 310, 50, "Skills", 0xFF00FF, 0xFFFFFF)
 };
 
-vex::color unpressedColors[4] = {0xFF0000, 0xFFA500, 0x0000FF, 0xFF00FF};
+vex::color unpressedColors[3] = {0xFF0000, 0x0000FF, 0xFF00FF};
 
 /*---------------------------------------------------------------------------*/
 /*                                                                           */
@@ -258,45 +257,86 @@ void autonomous(void) {
   intake.setVelocity(100, percent);
   stringLauncher.set(0);
   
-  if (autonToRun == 1 || autonToRun == 2 || autonToRun == 3) {
-    // Auton to run when anything but skills
-
-    intake.spinFor(forward, 180, degrees);
-  }
-
-  if (autonToRun == 4) {
-    // Skills Autonomous (40 + 12 + points from string launcher)
-    //beginning of auton task (in school starts under roller along front-right wall when looking at field from our table)
-
-    intake.spinFor(forward, 180, degrees);
-    driveForward(19, turns, 60, pct);
+  if (autonToRun == 1) {
+    // Left side (AWP) match autonomous (centered width-align, front length-align)
+    driveBackward(7, turns, 60, pct);
+    intake.spinFor(forward, 200, degrees);
+    driveForward(3.5, turns, 60, pct);
     turnRight(90, turns, 60, pct);
-    driveBackward(19, turns, 60, pct);
-    intake.spinFor(reverse, 2, turns);
+    driveForward(48, turns, 60, pct);
 
-    intake.spin(forward);
-    driveForward(79, turns, 60, pct);
     turnLeft(90, turns, 10, pct);
-    driveForward(24, turns, 60, pct);
+    driveForward(27.5, turns, 60, pct);
+    intake.spin(forward);
+    driveForward(8.5, turns, 60, pct);
     intake.stop();
     turnLeft(45, turns, 60, pct);
+    driveForward(7, turns, 60, pct);
+
+    flywheel.spin(forward);
+    wait(2, seconds);
+    intake.spin(reverse);
+    wait(5, seconds);
+    flywheel.stop();
+    intake.stop();
+  }
+  else if (autonToRun == 2) {
+    // Dummy code to prevent error
+    wait(100, msec);
+
+    // Right side match autonomous (centered width-align, front length-align)
+    intake.spin(forward);
+    driveForward(20.5, turns, 60, pct);
+    intake.stop();
+    turnLeft(45, turns, 60, pct);
+    driveForward(33.94112549695428, turns, 60, pct);
+    turnRight(90, turns, 60, pct);
+    driveForward(7, turns, 60, pct);
+
+    flywheel.spin(forward);
+    wait(2, seconds);
+    intake.spin(reverse);
+    wait(5, seconds);
+    flywheel.stop();
+    intake.stop();
+    
+    driveBackward(7, turns, 60, pct);
+    turnLeft(90, turns, 60, pct);
+    driveBackward(67.88225099390856, turns, 60, pct);
+    turnRight(45, turns, 60, pct);
+    driveBackward(3.5, turns, 60, pct);
+    intake.spinFor(forward, 200, degrees);
+  }
+  else if (autonToRun == 3) {
+    // Skills autonomous (left side, centered width-align, front length-align) (53 or 56 points: 35 + 18 or 21 points from string launcher)
+
+    driveBackward(7, turns, 60, pct);
+    intake.spinFor(forward, 200, degrees);
+    driveForward(5, turns, 60, pct);
+    intake.spin(forward);
+    driveForward(22.5, turns, 60, pct);
+    intake.stop();
+    turnRight(90, turns, 60, pct);
+    driveBackward(27.5, turns, 60, pct);
+    intake.spinFor(forward, 200, degrees);
+
+    driveForward(75.5, turns, 60, pct);
+    turnLeft(90, turns, 10, pct);
+    driveForward(24, turns, 60, pct);
+    turnLeft(45, turns, 60, pct);
+    driveForward(7, turns, 60, pct);
+
     flywheel.spin(forward);
     wait(2, seconds);
     intake.spin(reverse);
     wait(2, seconds);
+    flywheel.stop();
     intake.stop();
+    
+    driveBackward(7, turns, 60, pct);
+    turnRight(45, turns, 60, pct);
+    driveBackward(51.5, turns, 60, pct);
     stringLauncher.set(1);
-    
-    /*
-    intake.spinFor(forward, 999, turns, false);
-    driveForward(41, turns, 60, pct);
-    turnRight(90, turns, 60, pct);
-    intake.stop();
-    driveBackward(41, turns, 60, pct);
-    intake.spinFor(forward, 2, turns);
-
-    */
-    
     
     /* Comment out all auton PID code for now
     enabledrivePID = true;
@@ -314,7 +354,8 @@ void autonomous(void) {
   }
   else {
     // Autonomous to run when no autonomous is selected on brain
-    intake.spinFor(forward, 180, degrees);
+    driveBackward(4, turns, 60, pct);
+    intake.spinFor(forward, 200, degrees);
   }
 }
 
@@ -365,12 +406,12 @@ void usercontrol(void) {
       if (launchString) {
         stringLauncher.set(1);
         launchString = false;
-        wait(10, msec);
+        wait(500, msec);
       }
       else {
         stringLauncher.set(0);
         launchString = true;
-        wait(10, msec);
+        wait(500, msec);
       }
     }
 
@@ -415,7 +456,7 @@ int main() {
 
     // Render autonomous selector on brain
     if (!Competition.isEnabled()) {
-      for(int i = 0; i < 4; i++) {
+      for(int i = 0; i < 3; i++) {
         autonButtons[i].render();
         if(autonButtons[i].isClicked()) {
           autonButtons[autonToRun].buttonColor = unpressedColors[autonToRun];
