@@ -22,6 +22,8 @@ extern encoder leftEncoder;
 extern encoder rightEncoder;
 extern encoder backEncoder;
 
+extern inertial inertialSensor;
+
 extern digital_out stringLauncher;
 
 /**

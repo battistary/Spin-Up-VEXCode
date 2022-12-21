@@ -26,6 +26,8 @@ encoder leftEncoder = encoder(Brain.ThreeWirePort.A);
 encoder rightEncoder = encoder(Brain.ThreeWirePort.C);
 encoder backEncoder = encoder(Brain.ThreeWirePort.E);
 
+inertial inertialSensor(PORT21);
+
 digital_out stringLauncher = digital_out(Brain.ThreeWirePort.G);
 
 // VEXcode generated functions
