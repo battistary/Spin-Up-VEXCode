@@ -259,19 +259,20 @@ void autonomous(void) {
   
   if (autonToRun == 1) {
     // Left side (AWP) match autonomous (centered width-align, front length-align)
-    driveBackward(7, turns, 60, pct);
+    
+    driveBackward(6.5, turns, 60, pct);
     intake.spinFor(forward, 200, degrees);
-    driveForward(3.5, turns, 60, pct);
+    driveForward(3.25, turns, 60, pct);
     turnRight(90, turns, 60, pct);
     driveForward(48, turns, 60, pct);
 
-    turnLeft(90, turns, 10, pct);
-    driveForward(27.5, turns, 60, pct);
+    turnLeft(90, turns, 60, pct);
+    driveForward(24, turns, 60, pct);
     intake.spin(forward);
-    driveForward(8.5, turns, 60, pct);
+    driveForward(24, turns, 60, pct);
     intake.stop();
     turnLeft(45, turns, 60, pct);
-    driveForward(7, turns, 60, pct);
+    driveForward(4.596194077712559, turns, 60, pct);
 
     flywheel.spin(forward);
     wait(2, seconds);
@@ -281,17 +282,15 @@ void autonomous(void) {
     intake.stop();
   }
   else if (autonToRun == 2) {
-    // Dummy code to prevent error
-    wait(100, msec);
-
     // Right side match autonomous (centered width-align, front length-align)
+
     intake.spin(forward);
-    driveForward(20.5, turns, 60, pct);
+    driveForward(20.75, turns, 60, pct);
     intake.stop();
     turnLeft(45, turns, 60, pct);
     driveForward(33.94112549695428, turns, 60, pct);
     turnRight(90, turns, 60, pct);
-    driveForward(7, turns, 60, pct);
+    driveForward(4.596194077712559, turns, 60, pct);
 
     flywheel.spin(forward);
     wait(2, seconds);
@@ -300,31 +299,31 @@ void autonomous(void) {
     flywheel.stop();
     intake.stop();
     
-    driveBackward(7, turns, 60, pct);
+    driveBackward(4.596194077712559, turns, 60, pct);
     turnLeft(90, turns, 60, pct);
     driveBackward(67.88225099390856, turns, 60, pct);
     turnRight(45, turns, 60, pct);
-    driveBackward(3.5, turns, 60, pct);
+    driveBackward(3.25, turns, 60, pct);
     intake.spinFor(forward, 200, degrees);
   }
   else if (autonToRun == 3) {
-    // Skills autonomous (left side, centered width-align, front length-align) (53 or 56 points: 35 + 18 or 21 points from string launcher)
-
-    driveBackward(7, turns, 60, pct);
+    // Skills autonomous (left side, centered width-align, front length-align) (62 points: 35 + 15 + 12 points from string launcher)
+    
+    driveBackward(6.5, turns, 60, pct);
     intake.spinFor(forward, 200, degrees);
     driveForward(5, turns, 60, pct);
     intake.spin(forward);
-    driveForward(22.5, turns, 60, pct);
+    driveForward(22.25, turns, 60, pct);
     intake.stop();
     turnRight(90, turns, 60, pct);
-    driveBackward(27.5, turns, 60, pct);
+    driveBackward(27.25, turns, 60, pct);
     intake.spinFor(forward, 200, degrees);
 
-    driveForward(75.5, turns, 60, pct);
+    driveForward(75.25, turns, 60, pct);
     turnLeft(90, turns, 10, pct);
     driveForward(24, turns, 60, pct);
     turnLeft(45, turns, 60, pct);
-    driveForward(7, turns, 60, pct);
+    driveForward(4.596194077712559, turns, 60, pct);
 
     flywheel.spin(forward);
     wait(2, seconds);
@@ -333,9 +332,9 @@ void autonomous(void) {
     flywheel.stop();
     intake.stop();
     
-    driveBackward(7, turns, 60, pct);
+    driveBackward(4.596194077712559, turns, 60, pct);
     turnRight(45, turns, 60, pct);
-    driveBackward(51.5, turns, 60, pct);
+    driveBackward(51.25, turns, 60, pct);
     stringLauncher.set(1);
     
     /* Comment out all auton PID code for now
