@@ -253,7 +253,6 @@ vex::color unpressedColors[3] = {0xFF0000, 0x0000FF, 0xFF00FF};
 
 void autonomous(void) {
   // Set motor velocities
-  flywheel.setVelocity(3600, rpm);
   intake.setVelocity(100, percent);
   stringLauncher.set(0);
   
@@ -274,7 +273,7 @@ void autonomous(void) {
     turnLeft(45, turns, 60, pct);
     driveForward(4.596194077712559, turns, 60, pct);
 
-    flywheel.spin(forward);
+    flywheel.spin(forward, 12, volt);
     wait(2, seconds);
     intake.spin(reverse);
     wait(5, seconds);
@@ -292,7 +291,7 @@ void autonomous(void) {
     turnRight(90, turns, 60, pct);
     driveForward(4.596194077712559, turns, 60, pct);
 
-    flywheel.spin(forward);
+    flywheel.spin(forward, 12, volt);
     wait(2, seconds);
     intake.spin(reverse);
     wait(5, seconds);
@@ -325,7 +324,7 @@ void autonomous(void) {
     turnLeft(45, turns, 60, pct);
     driveForward(4.596194077712559, turns, 60, pct);
 
-    flywheel.spin(forward);
+    flywheel.spin(forward, 12, volt);
     wait(2, seconds);
     intake.spin(reverse);
     wait(2, seconds);
@@ -377,7 +376,6 @@ void usercontrol(void) {
   
   while (1) {
     // Initialize devices
-    flywheel.setVelocity(3600, rpm);
     intake.setVelocity(100, percent);
 
     // Define button press actions
@@ -394,7 +392,7 @@ void usercontrol(void) {
 
     // Flywheel
     if (controller1.ButtonR1.pressing()){
-      flywheel.spin(forward);
+      flywheel.spin(forward, 12, volt);
     }
     else {
       flywheel.stop();
