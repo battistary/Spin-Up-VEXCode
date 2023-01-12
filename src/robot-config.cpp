@@ -17,7 +17,7 @@ motor driveLeftBack = motor(PORT7, ratio6_1, true);
 motor driveRightFront = motor(PORT18, ratio6_1, false);
 motor driveRightCenter = motor(PORT19, ratio6_1, false);
 motor driveRightBack = motor(PORT20, ratio6_1, false);
-motor intake = motor(PORT10, ratio18_1, true);
+motor intake = motor(PORT9, ratio18_1, true);
 motor flywheel = motor(PORT11, ratio6_1, false);
 motor_group driveLeft(driveLeftBack, driveLeftCenter, driveLeftFront);
 motor_group driveRight(driveRightBack, driveRightCenter, driveRightFront);

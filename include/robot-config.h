@@ -12,8 +12,8 @@ extern motor driveLeftBack;
 extern motor driveRightFront;
 extern motor driveRightCenter;
 extern motor driveRightBack;
-extern motor intake;
 extern motor flywheel;
+extern motor intake;
 
 extern motor_group driveLeft;
 extern motor_group driveRight;

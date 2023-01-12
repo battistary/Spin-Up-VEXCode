@@ -273,7 +273,7 @@ void autonomous(void) {
     turnLeft(45, turns, 60, pct);
     driveForward(4.596194077712559, turns, 60, pct);
 
-    flywheel.spin(forward, 10.5, volt);
+    flywheel.spin(forward, 11, volt);
     wait(2, seconds);
     intake.spin(reverse);
     wait(5, seconds);
@@ -291,7 +291,7 @@ void autonomous(void) {
     turnRight(90, turns, 60, pct);
     driveForward(4.596194077712559, turns, 60, pct);
 
-    flywheel.spin(forward, 10.5, volt);
+    flywheel.spin(forward, 11, volt);
     wait(2, seconds);
     intake.spin(reverse);
     wait(5, seconds);
@@ -324,7 +324,7 @@ void autonomous(void) {
     turnLeft(45, turns, 60, pct);
     driveForward(4.596194077712559, turns, 60, pct);
 
-    flywheel.spin(forward, 10.5, volt);
+    flywheel.spin(forward, 11, volt);
     wait(2, seconds);
     intake.spin(reverse);
     wait(2, seconds);
@@ -392,7 +392,7 @@ void usercontrol(void) {
 
     // Flywheel
     if (controller1.ButtonR1.pressing()){
-      flywheel.spin(forward, 10.5, volt);
+      flywheel.spin(forward, 11, volt);
     }
     else {
       flywheel.stop();
