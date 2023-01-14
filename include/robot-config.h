@@ -24,7 +24,8 @@ extern encoder backEncoder;
 
 extern inertial inertialSensor;
 
-extern digital_out stringLauncher;
+extern digital_out stringLauncher1;
+extern digital_out stringLauncher2;
 
 /**
  * Used to initialize code/tasks/devices added using tools in VEXcode Pro.

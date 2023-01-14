@@ -25,7 +25,8 @@
 // leftEncoder          encoder       A, B
 // rightEncoder         encoder       C, D
 // backEncoder          encoder       E, F
-// stringLauncher       digital_out   G
+// stringLauncher1       digital_out  A
+// stringLauncher2       digital_out  B
 // ---- END VEXCODE CONFIGURED DEVICES ----
 
 #include "vex.h"
@@ -50,6 +51,7 @@ competition Competition;
 void pre_auton(void) {
   // Initializing Robot Configuration. DO NOT REMOVE!
   vexcodeInit();
+  inertialSensor.calibrate();
 
   Brain.Screen.drawImageFromFile("brain_logo.png", 0, 0);
 
@@ -74,7 +76,8 @@ void pre_auton(void) {
   intake.setBrake(coast);
   flywheel.setBrake(coast);
 
-  stringLauncher.set(0);
+  stringLauncher1.set(0);
+  stringLauncher2.set(0);
 
   driveRightCenter.setTimeout(3, seconds);
   driveRightBack.setTimeout(3, seconds);
@@ -175,32 +178,50 @@ return 0;
 void driveForward(double inches, rotationUnits turns, double velocity, percentUnits pct) {
   driveLeft.setVelocity(velocity, percent);
   driveRight.setVelocity(velocity, percent);
-  driveLeft.spinFor(forward, inches / (2.75 * M_PI) / (4/3), turns, false);
-  driveRight.spinFor(forward, inches / (2.75 * M_PI) / (4/3), turns, true);
+  driveLeft.spinFor(forward, inches / (3.25 * M_PI) / (4/3), turns, false);
+  driveRight.spinFor(forward, inches / (3.25 * M_PI) / (4/3), turns, true);
 }
 
 // Drive Backward
 void driveBackward(double inches, rotationUnits turns, double velocity, percentUnits pct) {
   driveLeft.setVelocity(velocity, percent);
   driveRight.setVelocity(velocity, percent);
-  driveLeft.spinFor(reverse, inches / (2.75 * M_PI) / (4/3), turns, false);
-  driveRight.spinFor(reverse, inches / (2.75 * M_PI) / (4/3), turns, true);
+  driveLeft.spinFor(reverse, inches / (3.25 * M_PI) / (4/3), turns, false);
+  driveRight.spinFor(reverse, inches / (3.25 * M_PI) / (4/3), turns, true);
 }
 
 // Turn right
-void turnRight(double degrees, rotationUnits turns, double velocity, percentUnits pct) {
-  driveLeft.setVelocity(velocity, percent);
-  driveRight.setVelocity(velocity, percent);
-  driveLeft.spinFor(forward, (degrees * 0.0479722222222222) / (2.75 * M_PI) / (4/3), turns, false);
-  driveRight.spinFor(reverse, (degrees * 0.0479722222222222) / (2.75 * M_PI) / (4/3), turns, true);
+//void turnRight(double botDegrees, rotationUnits degrees, double velocity, percentUnits pct) {
+//  driveLeft.setVelocity(velocity, percent);
+//  driveRight.setVelocity(velocity, percent);
+//  driveLeft.spinFor(forward, ((botDegrees * 0.0959444444444444) / 2) / (3.25 * M_PI) / (4/3), degrees, false);
+//  driveRight.spinFor(reverse, ((botDegrees * 0.0959444444444444) / 2) / (3.25 * M_PI) / (4/3), degrees, true);
+//}
+//
+//// Turn left
+//void turnLeft(double botDegrees, rotationUnits degrees, double velocity, percentUnits pct) {
+//  driveLeft.setVelocity(velocity, percent);
+//  driveRight.setVelocity(velocity, percent);
+//  driveLeft.spinFor(forward, ((botDegrees * 0.0959444444444444) / 2) / (3.25 * M_PI) / (4/3), degrees, false);
+//  driveRight.spinFor(reverse, ((botDegrees * 0.0959444444444444) / 2) / (3.25 * M_PI) / (4/3), degrees, true);
+//}
+
+// Inertial turn left
+void iTurnLeft(double turn, double velocity) {
+  driveLeft.spin(reverse, velocity, percent);
+  driveRight.spin(forward, velocity, percent);
+  waitUntil(inertialSensor.rotation(degrees) <= (turn / 2));
+  driveLeft.stop();
+  driveRight.stop();
 }
 
-// Turn left
-void turnLeft(double degrees, rotationUnits turns, double velocity, percentUnits pct) {
-  driveLeft.setVelocity(velocity, percent);
-  driveRight.setVelocity(velocity, percent);
-  driveLeft.spinFor(forward, (degrees * 0.0479722222222222) / (2.75 * M_PI) / (4/3), turns, false);
-  driveRight.spinFor(reverse, (degrees * 0.0479722222222222) / (2.75 * M_PI) / (4/3), turns, true);
+// Inertial turn right
+void iTurnRight(double turn, double velocity) {
+  driveLeft.spin(forward, velocity, percent);
+  driveRight.spin(reverse, velocity, percent);
+  waitUntil(inertialSensor.rotation(degrees) >= (turn / 2));
+  driveLeft.stop();
+  driveRight.stop();
 }
 
 /*---------------------------------------------------------------------------*/
@@ -235,7 +256,7 @@ class Button
 
 Button autonButtons[] = {
   Button(10, 10, 150, 50, "Left Match (AWP)", 0xFF0000, 0xFFFFFF),
-  Button(170, 10, 150, 50, "RM (NOT CODED)", 0x0000FF, 0xFFFFFF),
+  Button(170, 10, 150, 50, "Right Match", 0x0000FF, 0xFFFFFF),
   Button(10, 70, 310, 50, "Skills", 0xFF00FF, 0xFFFFFF)
 };
 
@@ -254,24 +275,25 @@ vex::color unpressedColors[3] = {0xFF0000, 0x0000FF, 0xFF00FF};
 void autonomous(void) {
   // Set motor velocities
   intake.setVelocity(100, percent);
-  stringLauncher.set(0);
+  stringLauncher1.set(0);
+  stringLauncher2.set(0);
   
   if (autonToRun == 1) {
     // Left side (AWP) match autonomous (centered width-align, front length-align)
     
-    driveBackward(6.5, turns, 60, pct);
+    driveBackward(6.5, turns, 20, pct);
     intake.spinFor(forward, 200, degrees);
-    driveForward(3.25, turns, 60, pct);
-    turnRight(90, turns, 60, pct);
-    driveForward(48, turns, 60, pct);
+    driveForward(3.25, turns, 20, pct);
+    iTurnRight(90, 60);
+    driveForward(48, turns, 20, pct);
 
-    turnLeft(90, turns, 60, pct);
-    driveForward(24, turns, 60, pct);
+    iTurnLeft(0, 60);
+    driveForward(24, turns, 20, pct);
     intake.spin(forward);
-    driveForward(24, turns, 60, pct);
+    driveForward(24, turns, 20, pct);
     intake.stop();
-    turnLeft(45, turns, 60, pct);
-    driveForward(4.596194077712559, turns, 60, pct);
+    iTurnLeft(-45, 60);
+    driveForward(4.596194077712559, turns, 20, pct);
 
     flywheel.spin(forward, 11, volt);
     wait(2, seconds);
@@ -284,12 +306,12 @@ void autonomous(void) {
     // Right side match autonomous (centered width-align, front length-align)
 
     intake.spin(forward);
-    driveForward(20.75, turns, 60, pct);
+    driveForward(20.75, turns, 20, pct);
     intake.stop();
-    turnLeft(45, turns, 60, pct);
-    driveForward(33.94112549695428, turns, 60, pct);
-    turnRight(90, turns, 60, pct);
-    driveForward(4.596194077712559, turns, 60, pct);
+    iTurnLeft(-45, 60);
+    driveForward(33.94112549695428, turns, 20, pct); // little longer
+    iTurnRight(45, 60);
+    driveForward(4.596194077712559, turns, 20, pct);
 
     flywheel.spin(forward, 11, volt);
     wait(2, seconds);
@@ -298,31 +320,31 @@ void autonomous(void) {
     flywheel.stop();
     intake.stop();
     
-    driveBackward(4.596194077712559, turns, 60, pct);
-    turnLeft(90, turns, 60, pct);
-    driveBackward(67.88225099390856, turns, 60, pct);
-    turnRight(45, turns, 60, pct);
-    driveBackward(3.25, turns, 60, pct);
+    driveBackward(4.596194077712559, turns, 20, pct); 
+    iTurnLeft(-45, 60);
+    driveBackward(67.88225099390856, turns, 20, pct); //little longer
+    iTurnRight(0, 60); //less 
+    driveBackward(3.25, turns, 20, pct);
     intake.spinFor(forward, 200, degrees);
   }
   else if (autonToRun == 3) {
     // Skills autonomous (left side, centered width-align, front length-align) (62 points: 35 + 15 + 12 points from string launcher)
     
-    driveBackward(6.5, turns, 60, pct);
+    driveBackward(6.5, turns, 20, pct);
     intake.spinFor(forward, 200, degrees);
-    driveForward(5, turns, 60, pct);
+    driveForward(5, turns, 20, pct);
     intake.spin(forward);
-    driveForward(22.25, turns, 60, pct);
+    driveForward(22.25, turns, 20, pct);
     intake.stop();
-    turnRight(90, turns, 60, pct);
-    driveBackward(27.25, turns, 60, pct);
+    iTurnRight(90, 60);
+    driveBackward(27.25, turns, 20, pct);
     intake.spinFor(forward, 200, degrees);
 
-    driveForward(75.25, turns, 60, pct);
-    turnLeft(90, turns, 10, pct);
-    driveForward(24, turns, 60, pct);
-    turnLeft(45, turns, 60, pct);
-    driveForward(4.596194077712559, turns, 60, pct);
+    driveForward(75.25, turns, 20, pct);
+    iTurnLeft(0, 60);
+    driveForward(24, turns, 20, pct);
+    iTurnLeft(-45, 60);
+    driveForward(4.596194077712559, turns, 20, pct);
 
     flywheel.spin(forward, 11, volt);
     wait(2, seconds);
@@ -331,10 +353,11 @@ void autonomous(void) {
     flywheel.stop();
     intake.stop();
     
-    driveBackward(4.596194077712559, turns, 60, pct);
-    turnRight(45, turns, 60, pct);
-    driveBackward(51.25, turns, 60, pct);
-    stringLauncher.set(1);
+    driveBackward(4.596194077712559, turns, 20, pct);
+    iTurnRight(0, 60);
+    driveBackward(51.25, turns, 20, pct);
+    stringLauncher1.set(1);
+    stringLauncher2.set(1);
     
     /* Comment out all auton PID code for now
     enabledrivePID = true;
@@ -352,7 +375,7 @@ void autonomous(void) {
   }
   else {
     // Autonomous to run when no autonomous is selected on brain
-    driveBackward(4, turns, 60, pct);
+    driveBackward(4, turns, 20, pct);
     intake.spinFor(forward, 200, degrees);
   }
 }
@@ -371,7 +394,8 @@ void usercontrol(void) {
   // User control code
   enabledrivePID = false;
   
-  stringLauncher.set(0);
+  stringLauncher1.set(0);
+  stringLauncher2.set(0);
   bool launchString = true;
   
   while (1) {
@@ -399,14 +423,16 @@ void usercontrol(void) {
     }
 
     // String Launcher Piston
-    if (controller1.ButtonA.pressing()) {
+    if (controller2.ButtonA.pressing()) {
       if (launchString) {
-        stringLauncher.set(1);
+        stringLauncher1.set(1);
+        stringLauncher2.set(1);
         launchString = false;
         wait(500, msec);
       }
       else {
-        stringLauncher.set(0);
+        stringLauncher1.set(0);
+        stringLauncher2.set(0);
         launchString = true;
         wait(500, msec);
       }
@@ -414,12 +440,12 @@ void usercontrol(void) {
 
     // One tile drive function test
     //if (controller1.ButtonRight.pressing()) {
-    //  driveForward(24, turns, 60, pct);
+    //  driveForward(24, turns, 20, pct);
     //}
 
     // 90 Degree turn function test
     //if (controller1.ButtonLeft.pressing()) {
-    //  turnLeft(90, turns, 60, pct);
+    //  turnLeft(90, turns, 20, pct);
     //}
 
     // Define joystick control
