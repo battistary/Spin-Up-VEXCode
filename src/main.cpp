@@ -202,8 +202,8 @@ void driveBackward(double inches, rotationUnits turns, double velocity, percentU
 //void turnLeft(double botDegrees, rotationUnits degrees, double velocity, percentUnits pct) {
 //  driveLeft.setVelocity(velocity, percent);
 //  driveRight.setVelocity(velocity, percent);
-//  driveLeft.spinFor(forward, ((botDegrees * 0.0959444444444444) / 2) / (3.25 * M_PI) / (4/3), degrees, false);
-//  driveRight.spinFor(reverse, ((botDegrees * 0.0959444444444444) / 2) / (3.25 * M_PI) / (4/3), degrees, true);
+//  driveLeft.spinFor(forward, ((botDegrees * 0.0959444444444444) / 2) * (3.25 * M_PI) * (3/4), degrees, false);
+//  driveRight.spinFor(reverse, ((botDegrees * 0.0959444444444444) / 2) * (3.25 * M_PI) * (3/4), degrees, true);
 //}
 
 // Inertial turn left
@@ -219,9 +219,23 @@ void iTurnLeft(double turn, double velocity) {
 void iTurnRight(double turn, double velocity) {
   driveLeft.spin(forward, velocity, percent);
   driveRight.spin(reverse, velocity, percent);
-  waitUntil(inertialSensor.rotation(degrees) >= (turn / 2));
+  waitUntil(inertialSensor.rotation(degrees) >= turn);
   driveLeft.stop();
   driveRight.stop();
+}
+
+void newDriveForward(double inches, double velocity, percentUnits pct) {
+  driveLeft.setVelocity(velocity, percent);
+  driveRight.setVelocity(velocity, percent);
+  driveLeft.spinFor(forward, inches / (((360 * M_PI) / 360) * (3/4)), degrees, false);
+  driveRight.spinFor(forward, inches / (((360 * M_PI) / 360) * (3/4)), degrees, true);
+}
+
+void newDriveBacward(double inches, double velocity, percentUnits pct) {
+  driveLeft.setVelocity(velocity, percent);
+  driveRight.setVelocity(velocity, percent);
+  driveLeft.spinFor(reverse, inches / (((360 * M_PI) / 360) * (3/4)), degrees, false);
+  driveRight.spinFor(reverse, inches / (((360 * M_PI) / 360) * (3/4)), degrees, true);
 }
 
 /*---------------------------------------------------------------------------*/
@@ -303,80 +317,110 @@ void autonomous(void) {
     intake.stop();
   }
   else if (autonToRun == 2) {
-    // Right side match autonomous (centered width-align, front length-align)
+    // Right side match autonomous (right width-align, front length-align, turned 90* counterclockwise)
 
-    intake.spin(forward);
-    driveForward(20.75, turns, 20, pct);
-    intake.stop();
-    iTurnLeft(-45, 60);
-    driveForward(33.94112549695428, turns, 20, pct); // little longer
-    iTurnRight(45, 60);
-    driveForward(4.596194077712559, turns, 20, pct);
-
-    flywheel.spin(forward, 11, volt);
-    wait(2, seconds);
-    intake.spin(reverse);
-    wait(5, seconds);
-    flywheel.stop();
-    intake.stop();
-    
-    driveBackward(4.596194077712559, turns, 20, pct); 
-    iTurnLeft(-45, 60);
-    driveBackward(67.88225099390856, turns, 20, pct); //little longer
-    iTurnRight(0, 60); //less 
-    driveBackward(3.25, turns, 20, pct);
+    driveBackward(34, turns, 20, pct);
+    iTurnRight(85, 20);
+    driveBackward(21, turns, 20, pct);
     intake.spinFor(forward, 200, degrees);
+
+//    //intake.spin(forward);
+//    driveForward(20.75, turns, 20, pct);
+//    //intake.stop();
+//    iTurnLeft(-45, 60);
+//    driveForward(33.94112549695428, turns, 20, pct); // little longer
+//    iTurnRight(45, 60);
+//    driveForward(4.596194077712559, turns, 20, pct);
+//
+//    flywheel.spin(forward, 11, volt);
+//    wait(2, seconds);
+//    intake.spin(reverse);
+//    wait(5, seconds);
+//    flywheel.stop();
+//    intake.stop();
+//    
+//    driveBackward(4.596194077712559, turns, 20, pct); 
+//    iTurnLeft(-45, 60);
+//    driveBackward(67.88225099390856, turns, 20, pct); //little longer
+//    iTurnRight(0, 60); //less 
+//    driveBackward(3.25, turns, 20, pct);
+//    intake.spinFor(forward, 200, degrees);
   }
   else if (autonToRun == 3) {
-    // Skills autonomous (left side, centered width-align, front length-align) (62 points: 35 + 15 + 12 points from string launcher)
+    // Skills autonomous (left side, left width-align, front length-align) (62 points: 35 + 15 + 12 points from string launcher)
     
-    driveBackward(6.5, turns, 20, pct);
-    intake.spinFor(forward, 200, degrees);
-    driveForward(5, turns, 20, pct);
-    intake.spin(forward);
-    driveForward(22.25, turns, 20, pct);
-    intake.stop();
-    iTurnRight(90, 60);
-    driveBackward(27.25, turns, 20, pct);
+    driveBackward(34, turns, 20, pct);
+    iTurnRight(85, 20);
+    driveBackward(21, turns, 20, pct);
     intake.spinFor(forward, 200, degrees);
 
-    driveForward(75.25, turns, 20, pct);
-    iTurnLeft(0, 60);
-    driveForward(24, turns, 20, pct);
-    iTurnLeft(-45, 60);
-    driveForward(4.596194077712559, turns, 20, pct);
+    driveForward(10, turns, 20, pct);
+    iTurnLeft(0, 20);
+    driveBackward(21, turns, 20, pct);
+    intake.spinFor(forward, 200, degrees);
 
-    flywheel.spin(forward, 11, volt);
-    wait(2, seconds);
-    intake.spin(reverse);
-    wait(2, seconds);
-    flywheel.stop();
-    intake.stop();
-    
-    driveBackward(4.596194077712559, turns, 20, pct);
-    iTurnRight(0, 60);
-    driveBackward(51.25, turns, 20, pct);
+    driveForward(15, turns, 20, pct);
+    iTurnLeft(90, 20);
+    driveForward(10, turns, 20, pct);
+    iTurnRight(225, 20);
+
     stringLauncher1.set(1);
     stringLauncher2.set(1);
-    
-    /* Comment out all auton PID code for now
-    enabledrivePID = true;
-    vex::task AutonomousDrive(drivePID);
 
-    resetDriveSensors = true;
-    desiredValue = 300;
-    desiredTurnValue = 600;
-
-    vex::task::sleep(1000);
-
-    resetDriveSensors = true;
-    desiredValue = 300;
-    desiredTurnValue = 300; */
+    //driveBackward(6.5, turns, 20, pct);
+    //intake.spinFor(forward, 200, degrees);
+//
+    ////intake.spin(forward);
+    //driveForward(24, turns, 20, pct);
+    ////intake.stop();
+    //iTurnRight(90, 20);
+    //driveBackward(24, turns, 20, pct);
+    //intake.spinFor(forward, 200, degrees);
+//
+    //driveForward(60, turns, 20, pct);
+    //iTurnLeft(0, 60);
+    //driveForward(66.5, turns, 20, pct);
+    //iTurnLeft(-90, 60);
+    //driveBackward(54.5, turns, 20, pct);
+    //intake.spinFor(forward, 200, degrees);
+//
+//
+//
+    //driveForward(4.596194077712559, turns, 20, pct);
+//
+    //flywheel.spin(forward, 11, volt);
+    //wait(2, seconds);
+    //intake.spin(reverse);
+    //wait(2, seconds);
+    //flywheel.stop();
+    //intake.stop();
+    //
+    //driveBackward(4.596194077712559, turns, 20, pct);
+    //iTurnRight(0, 60);
+    //driveBackward(51.25, turns, 20, pct);
+    //stringLauncher1.set(1);
+    //stringLauncher2.set(1);
+    //
+    ///* Comment out all auton PID code for now
+    //enabledrivePID = true;
+    //vex::task AutonomousDrive(drivePID);
+//
+    //resetDriveSensors = true;
+    //desiredValue = 300;
+    //desiredTurnValue = 600;
+//
+    //vex::task::sleep(1000);
+//
+    //resetDriveSensors = true;
+    //desiredValue = 300;
+    //desiredTurnValue = 300; */
   }
   else {
     // Autonomous to run when no autonomous is selected on brain
-    driveBackward(4, turns, 20, pct);
-    intake.spinFor(forward, 200, degrees);
+    //driveBackward(4, turns, 20, pct);
+    //intake.spinFor(forward, 200, degrees);
+
+    newDriveForward(24, 20, pct);
   }
 }
 
