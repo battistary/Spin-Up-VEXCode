@@ -287,8 +287,7 @@ vex::color unpressedColors[3] = {0xFF0000, 0x0000FF, 0xFF00FF};
 /*---------------------------------------------------------------------------*/
 
 void autonomous(void) {
-  // Set motor velocities
-  intake.setVelocity(100, percent);
+  // Initialize devices
   stringLauncher1.set(0);
   stringLauncher2.set(0);
   
@@ -303,7 +302,7 @@ void autonomous(void) {
 
     iTurnLeft(0, 60);
     driveForward(24, turns, 20, pct);
-    intake.spin(forward);
+    intake.spin(forward, 11.8, volt);
     driveForward(24, turns, 20, pct);
     intake.stop();
     iTurnLeft(-45, 60);
@@ -311,7 +310,7 @@ void autonomous(void) {
 
     flywheel.spin(forward, 11, volt);
     wait(2, seconds);
-    intake.spin(reverse);
+    intake.spin(reverse, 11.8, volt);
     wait(5, seconds);
     flywheel.stop();
     intake.stop();
@@ -324,7 +323,7 @@ void autonomous(void) {
     driveBackward(21, turns, 20, pct);
     intake.spinFor(forward, 200, degrees);
 
-//    //intake.spin(forward);
+//    //intake.spin(forward, 11.8, volt);
 //    driveForward(20.75, turns, 20, pct);
 //    //intake.stop();
 //    iTurnLeft(-45, 60);
@@ -334,7 +333,7 @@ void autonomous(void) {
 //
 //    flywheel.spin(forward, 11, volt);
 //    wait(2, seconds);
-//    intake.spin(reverse);
+//    intake.spin(reverse, 11.8, volt);
 //    wait(5, seconds);
 //    flywheel.stop();
 //    intake.stop();
@@ -370,7 +369,7 @@ void autonomous(void) {
     //driveBackward(6.5, turns, 20, pct);
     //intake.spinFor(forward, 200, degrees);
 //
-    ////intake.spin(forward);
+    ////intake.spin(forward, 11.8, volt);
     //driveForward(24, turns, 20, pct);
     ////intake.stop();
     //iTurnRight(90, 20);
@@ -390,7 +389,7 @@ void autonomous(void) {
 //
     //flywheel.spin(forward, 11, volt);
     //wait(2, seconds);
-    //intake.spin(reverse);
+    //intake.spin(reverse, 11.8, volt);
     //wait(2, seconds);
     //flywheel.stop();
     //intake.stop();
@@ -443,16 +442,13 @@ void usercontrol(void) {
   bool launchString = true;
   
   while (1) {
-    // Initialize devices
-    intake.setVelocity(100, percent);
-
     // Define button press actions
     // Intake / Roller-Roller
     if (controller1.ButtonL1.pressing()){
-      intake.spin(reverse);
+      intake.spin(reverse, 11.8, volt);
     }
     else if (controller1.ButtonL2.pressing()){
-      intake.spin(forward);
+      intake.spin(forward, 11.8, volt);
     }
     else {
       intake.stop();
