@@ -278,26 +278,27 @@ void autonomous(void) {
   if (autonToRun == 1) {
     // Left side (AWP) match autonomous (centered width-align, front length-align)
     
-    oldDriveBackward(6.5, turns, 20, pct);
-    intake.spinFor(forward, 200, degrees);
-    oldDriveForward(3.25, turns, 20, pct);
-    turnRight(90, 60);
-    oldDriveForward(48, turns, 20, pct);
-
-    turnLeft(0, 60);
-    oldDriveForward(24, turns, 20, pct);
-    intake.spin(forward, 11.8, volt);
-    oldDriveForward(24, turns, 20, pct);
-    intake.stop();
-    turnLeft(-45, 60);
-    oldDriveForward(4.596194077712559, turns, 20, pct);
-
-    flywheel.spin(forward, 11, volt);
-    wait(2, seconds);
-    intake.spin(reverse, 11.8, volt);
-    wait(5, seconds);
-    flywheel.stop();
-    intake.stop();
+    oldDriveBackward(21, turns, 20, pct);
+    intake.spinFor(forward, 220, degrees);
+    
+    //oldDriveForward(3.25, turns, 20, pct);
+    //turnRight(90, 60);
+    //oldDriveForward(48, turns, 20, pct);
+    //
+    //turnLeft(0, 60);
+    //oldDriveForward(24, turns, 20, pct);
+    //intake.spin(forward, 11.8, volt);
+    //oldDriveForward(24, turns, 20, pct);
+    //intake.stop();
+    //turnLeft(-45, 60);
+    //oldDriveForward(4.596194077712559, turns, 20, pct);
+    //
+    //flywheel.spin(forward, 11, volt);
+    //wait(2, seconds);
+    //intake.spin(reverse, 11.8, volt);
+    //wait(5, seconds);
+    //flywheel.stop();
+    //intake.stop();
   }
   else if (autonToRun == 2) {
     // Right side match autonomous (right width-align, front length-align, turned 90* counterclockwise)
@@ -305,7 +306,7 @@ void autonomous(void) {
     oldDriveBackward(34, turns, 20, pct);
     turnRight(85, 20);
     oldDriveBackward(21, turns, 20, pct);
-    intake.spinFor(forward, 200, degrees);
+    intake.spinFor(forward, 220, degrees);
 
 //    //intake.spin(forward, 11.8, volt);
 //    driveForward(20.75, turns, 20, pct);
@@ -342,63 +343,21 @@ void autonomous(void) {
 
     driveForward(22.25, 20, pct);
     turnLeft(47, 10);
-    driveForward(125, 20, pct);
-    driveBackward(10, 20, pct);
+    driveForward(130, 20, pct);
+    driveBackward(17, 20, pct);
     turnRight(173, 10);
-    driveBackward(25, 20, pct);
+    driveBackward(22.6, 20, pct);
     intake.spinFor(forward, 250, degrees);
     driveForward(22.25, 20, pct);
-    turnRight(83, 10);
+    turnRight(263, 10);
     driveBackward(21.5, 20, pct);
     intake.spinFor(forward,250, degrees);
     driveForward(24, 20, pct);
-    turnLeft(47, 10);
+    turnLeft(227, 10);
     driveBackward(15, 20, pct);
-
-
-    //driveForward(10, 20, pct);
-    //turnLeft(0, 20);
-    //oldDriveBackward(21, turns, 20, pct);
-    //intake.spinFor(forward, 200, degrees);
-//
-    //driveForward(15, 20, pct);
-    //turnLeft(90, 20);
-    //driveForward(10, 20, pct);
-    //turnRight(225, 20);
-//
+    
     //stringLauncher1.set(1);
     //stringLauncher2.set(1);
-//
-//
-//
-    //driveForward(4.596194077712559, 20, pct);
-//
-    //flywheel.spin(forward, 11, volt);
-    //wait(2, seconds);
-    //intake.spin(reverse, 11.8, volt);
-    //wait(2, seconds);
-    //flywheel.stop();
-    //intake.stop();
-    //
-    //driveBackward(4.596194077712559, 20, pct);
-    //turnRight(0, 60);
-    //driveBackward(51.25, 20, pct);
-    //stringLauncher1.set(1);
-    //stringLauncher2.set(1);
-    //
-    ///* Comment out all auton PID code for now
-    //enabledrivePID = true;
-    //vex::task AutonomousDrive(drivePID);
-//
-    //resetDriveSensors = true;
-    //desiredValue = 300;
-    //desiredTurnValue = 600;
-//
-    //vex::task::sleep(1000);
-//
-    //resetDriveSensors = true;
-    //desiredValue = 300;
-    //desiredTurnValue = 300; */
   }
   else {
     // Autonomous to run when no autonomous is selected on brain
