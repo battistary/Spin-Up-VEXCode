@@ -7,28 +7,6 @@
 /*                                                                            */
 /*----------------------------------------------------------------------------*/
 
-// ---- START VEXCODE CONFIGURED DEVICES ----
-// Robot Configuration:
-// [Name]               [Type]        [Port(s)]
-// controller1          controller
-// controller2          controller
-// driveLeftFront       motor         11
-// driveLeftCenter      motor         4
-// driveLeftBack        motor         12
-// driveRightFront      motor         1
-// driveRightCenter     motor         5
-// driveRightBack       motor         2
-// intake               motor         18
-// flywheel             motor         15
-// driveLeft            motor_group
-// driveRight           motor_group
-// leftEncoder          encoder       A, B
-// rightEncoder         encoder       C, D
-// backEncoder          encoder       E, F
-// stringLauncher1       digital_out  A
-// stringLauncher2       digital_out  B
-// ---- END VEXCODE CONFIGURED DEVICES ----
-
 #include "vex.h"
 
 using namespace vex;
@@ -60,18 +38,14 @@ void pre_auton(void) {
   backEncoder.setPosition(0, degrees);
 
   driveLeftBack.setBrake(coast);
-  driveLeftBack.setTimeout(5, seconds);
   driveLeftCenter.setBrake(coast);
-  driveLeftCenter.setTimeout(5, seconds);
   driveLeftFront.setBrake(coast);
-  driveLeftFront.setTimeout(5, seconds);
-
   driveRightBack.setBrake(coast);
-  driveRightBack.setTimeout(5, seconds);
   driveRightCenter.setBrake(coast);
-  driveRightCenter.setTimeout(5, seconds);
   driveRightFront.setBrake(coast);
-  driveRightFront.setTimeout(5, seconds);
+
+  driveLeft.setTimeout(6, seconds);
+  driveRight.setTimeout(6, seconds);
 
   intake.setBrake(coast);
   flywheel.setBrake(coast);
@@ -174,22 +148,6 @@ return 0;
 /*                           Auton Driving Functions                         */
 /*---------------------------------------------------------------------------*/
 
-// (OLD) Drive Forward 
-void oldDriveForward(double inches, rotationUnits turns, double velocity, percentUnits pct) {
-  driveLeft.setVelocity(velocity, percent);
-  driveRight.setVelocity(velocity, percent);
-  driveLeft.spinFor(forward, inches / ((3.25 * 3.14159) / (4/3)), turns, false);
-  driveRight.spinFor(forward, inches / ((3.25 * 3.14159) / (4/3)), turns, true);
-}
-
-// (OLD) Drive Backward
-void oldDriveBackward(double inches, rotationUnits turns, double velocity, percentUnits pct) {
-  driveLeft.setVelocity(velocity, percent);
-  driveRight.setVelocity(velocity, percent);
-  driveLeft.spinFor(reverse, inches / ((3.25 * 3.14159) / (4/3)), turns, false);
-  driveRight.spinFor(reverse, inches / ((3.25 * 3.14159) / (4/3)), turns, true);
-}
-
 void driveForward(double inches, double velocity, percentUnits pct) {
   driveLeft.setVelocity(velocity, percent);
   driveRight.setVelocity(velocity, percent);
@@ -272,63 +230,38 @@ vex::color unpressedColors[3] = {0xFF0000, 0x0000FF, 0xFF00FF};
 
 void autonomous(void) {
   // Initialize devices
+  intake.setVelocity(100, pct);
   stringLauncher1.set(0);
   stringLauncher2.set(0);
   
   if (autonToRun == 1) {
     // Left side (AWP) match autonomous (centered width-align, front length-align)
     
-    oldDriveBackward(21, turns, 20, pct);
-    intake.spinFor(forward, 220, degrees);
-    
-    //oldDriveForward(3.25, turns, 20, pct);
-    //turnRight(90, 60);
-    //oldDriveForward(48, turns, 20, pct);
-    //
-    //turnLeft(0, 60);
-    //oldDriveForward(24, turns, 20, pct);
-    //intake.spin(forward, 11.8, volt);
-    //oldDriveForward(24, turns, 20, pct);
-    //intake.stop();
-    //turnLeft(-45, 60);
-    //oldDriveForward(4.596194077712559, turns, 20, pct);
-    //
-    //flywheel.spin(forward, 11, volt);
-    //wait(2, seconds);
-    //intake.spin(reverse, 11.8, volt);
-    //wait(5, seconds);
-    //flywheel.stop();
-    //intake.stop();
+    driveBackward(7, 20, pct);
+    intake.spinFor(forward, 240, degrees);
   }
   else if (autonToRun == 2) {
     // Right side match autonomous (right width-align, front length-align, turned 90* counterclockwise)
 
-    oldDriveBackward(34, turns, 20, pct);
-    turnRight(85, 20);
-    oldDriveBackward(21, turns, 20, pct);
-    intake.spinFor(forward, 220, degrees);
+    //driveBackward(20, 20, pct);
+    //turnRight(83, 10);
+    //driveBackward(9, 20, pct);
+    //intake.spinFor(forward, 220, degrees);
 
-//    //intake.spin(forward, 11.8, volt);
-//    driveForward(20.75, turns, 20, pct);
-//    //intake.stop();
-//    turnLeft(-45, 60);
-//    driveForward(33.94112549695428, 20, pct); // little longer
-//    turnRight(45, 60);
-//    driveForward(4.596194077712559, 20, pct);
-//
-//    flywheel.spin(forward, 11, volt);
-//    wait(2, seconds);
-//    intake.spin(reverse, 11.8, volt);
-//    wait(5, seconds);
-//    flywheel.stop();
-//    intake.stop();
-//    
-//    driveBackward(4.596194077712559, 20, pct); 
-//    turnLeft(-45, 60);
-//    driveBackward(67.88225099390856, 20, pct); //little longer
-//    turnRight(0, 60); //less 
-//    driveBackward(3.25, 20, pct);
-//    intake.spinFor(forward, 200, degrees);
+    driveForward(41, 20, pct);
+    turnRight(30, 10);
+    flywheel.spin(forward, 12, volt);
+    intake.spinFor(forward, 90, degrees);
+    wait(1, seconds);
+    intake.spinFor(forward, 90, degrees);
+    wait(1, seconds);
+    intake.spinFor(forward, 90, degrees);
+    wait(1, seconds);
+    turnLeft(-45, 10);
+    driveBackward(42.72, 20, pct);
+    turnRight(0, 10);
+    driveBackward(24, 20, pct);
+    intake.spinFor(forward, 240, degrees);
   }
   else if (autonToRun == 3) {
     // Skills autonomous (left side, left width-align, front length-align) (62 points: 35 + 15 + 12 points from string launcher)
@@ -342,26 +275,25 @@ void autonomous(void) {
     intake.spinFor(forward, 250, degrees);
 
     driveForward(22.25, 20, pct);
-    turnLeft(47, 10);
+    turnLeft(49, 10);
     driveForward(130, 20, pct);
     driveBackward(17, 20, pct);
     turnRight(173, 10);
-    driveBackward(22.6, 20, pct);
+    driveBackward(23.5, 20, pct);
     intake.spinFor(forward, 250, degrees);
-    driveForward(22.25, 20, pct);
+    driveForward(22.85, 20, pct);
     turnRight(263, 10);
-    driveBackward(21.5, 20, pct);
-    intake.spinFor(forward,250, degrees);
+    driveBackward(23, 20, pct);
+    intake.spinFor(forward,270, degrees);
     driveForward(24, 20, pct);
     turnLeft(227, 10);
     driveBackward(15, 20, pct);
     
-    //stringLauncher1.set(1);
-    //stringLauncher2.set(1);
+    stringLauncher1.set(1);
+    stringLauncher2.set(1);
   }
   else {
     // Autonomous to run when no autonomous is selected on brain
-    oldDriveBackward(4, turns, 20, pct);
     intake.spinFor(forward, 200, degrees);
   }
 }
