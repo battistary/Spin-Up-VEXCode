@@ -1,7 +1,7 @@
 /*----------------------------------------------------------------------------*/
 /*                                                                            */
 /*    Module:       main.cpp                                                  */
-/*    Author:       Ryan Battista and Shrikar Seshadri                        */
+/*    Author:       Ryan Battista                                             */
 /*    Created:      Wed Jun 8 2022                                            */
 /*    Description:  9909Y Yottabyte 2022-2023 VEX Spin Up Code                */
 /*                                                                            */
@@ -231,60 +231,59 @@ vex::color unpressedColors[3] = {0xFF0000, 0x0000FF, 0xFF00FF};
 void autonomous(void) {
   // Initialize devices
   intake.setVelocity(100, pct);
+  flywheel.setVelocity(100, pct);
   stringLauncher1.set(0);
   stringLauncher2.set(0);
   
   if (autonToRun == 1) {
     // Left side (AWP) match autonomous (centered width-align, front length-align)
-    
     driveBackward(7, 20, pct);
     intake.spinFor(forward, 240, degrees);
   }
   else if (autonToRun == 2) {
-    // Right side match autonomous (right width-align, front length-align, turned 90* counterclockwise)
+    // Old right side match autono (right width-align, front length-align, turned 90* counterclockwise)
+    driveBackward(20, 20, pct);
+    turnRight(83, 10);
+    driveBackward(9, 20, pct);
+    intake.spinFor(forward, 220, degrees);
 
-    //driveBackward(20, 20, pct);
-    //turnRight(83, 10);
-    //driveBackward(9, 20, pct);
-    //intake.spinFor(forward, 220, degrees);
-
-    driveForward(41, 20, pct);
-    turnRight(30, 10);
-    flywheel.spin(forward, 12, volt);
-    intake.spinFor(forward, 90, degrees);
-    wait(1, seconds);
-    intake.spinFor(forward, 90, degrees);
-    wait(1, seconds);
-    intake.spinFor(forward, 90, degrees);
-    wait(1, seconds);
-    turnLeft(-45, 10);
-    driveBackward(42.72, 20, pct);
-    turnRight(0, 10);
-    driveBackward(24, 20, pct);
-    intake.spinFor(forward, 240, degrees);
+    // AWP right side match auton (right width-align, front length-align, facin forwards)
+    //driveForward(41, 20, pct);
+    //turnRight(30, 10);
+    //flywheel.spin(forward, 12, volt);
+    //intake.spinFor(forward, 90, degrees);
+    //wait(1, seconds);
+    //intake.spinFor(forward, 90, degrees);
+    //wait(1, seconds);
+    //intake.spinFor(forward, 90, degrees);
+    //wait(1, seconds);
+    //turnLeft(-45, 10);
+    //driveBackward(42.72, 20, pct);
+    //turnRight(0, 10);
+    //driveBackward(24, 20, pct);
+    //intake.spinFor(forward, 240, degrees);
   }
   else if (autonToRun == 3) {
-    // Skills autonomous (left side, left width-align, front length-align) (62 points: 35 + 15 + 12 points from string launcher)
-    intake.setVelocity(100, percent);
-
-    driveBackward(5.5, 20, pct);
-    intake.spinFor(forward, 250, degrees);
-    driveForward(22.25, 20, pct);
+    /* Skills autonomous (left side, left width-align, front length-align)
+    (91 points: 40 (roller) + 12 (bot) + 39 (string launcher) */
+    driveBackward(6, 20, pct);
+    intake.spinFor(forward, 300, degrees);
+    driveForward(19, 20, pct);
     turnRight(83, 10);
-    driveBackward(21.5, 20, pct);
-    intake.spinFor(forward, 250, degrees);
-
+    driveBackward(25, 20, pct);
+    intake.spinFor(forward, 330, degrees);
     driveForward(22.25, 20, pct);
-    turnLeft(49, 10);
-    driveForward(130, 20, pct);
-    driveBackward(17, 20, pct);
+    turnLeft(47, 10);
+
+    driveForward(250, 20, pct);
+    driveBackward(5, 20, pct);
     turnRight(173, 10);
-    driveBackward(23.5, 20, pct);
-    intake.spinFor(forward, 250, degrees);
-    driveForward(22.85, 20, pct);
+    driveBackward(25, 20, pct);
+    intake.spinFor(forward, 300, degrees);
+    driveForward(22, 20, pct);
     turnRight(263, 10);
-    driveBackward(23, 20, pct);
-    intake.spinFor(forward,270, degrees);
+    driveBackward(22.5, 20, pct);
+    intake.spinFor(forward, 300, degrees);
     driveForward(24, 20, pct);
     turnLeft(227, 10);
     driveBackward(15, 20, pct);
@@ -294,7 +293,8 @@ void autonomous(void) {
   }
   else {
     // Autonomous to run when no autonomous is selected on brain
-    intake.spinFor(forward, 200, degrees);
+    driveBackward(7, 20, pct);
+    intake.spinFor(forward, 240, degrees);
   }
 }
 
@@ -331,7 +331,7 @@ void usercontrol(void) {
 
     // Flywheel
     if (controller1.ButtonR1.pressing()){
-      flywheel.spin(forward, 11, volt);
+      flywheel.spin(forward, 10.3, volt);
     }
     else {
       flywheel.stop();
