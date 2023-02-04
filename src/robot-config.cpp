@@ -28,8 +28,7 @@ encoder backEncoder = encoder(Brain.ThreeWirePort.E);
 
 inertial inertialSensor(PORT4);
 
-digital_out stringLauncher1 = digital_out(Brain.ThreeWirePort.A);
-digital_out stringLauncher2 = digital_out(Brain.ThreeWirePort.B);
+digital_out stringLauncher = digital_out(Brain.ThreeWirePort.A);
 
 // VEXcode generated functions
 // define variable for remote controller enable/disable

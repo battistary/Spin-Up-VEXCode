@@ -50,8 +50,7 @@ void pre_auton(void) {
   intake.setBrake(coast);
   flywheel.setBrake(coast);
 
-  stringLauncher1.set(0);
-  stringLauncher2.set(0);
+  stringLauncher.set(0);
 
   driveRightCenter.setTimeout(3, seconds);
   driveRightBack.setTimeout(3, seconds);
@@ -232,8 +231,7 @@ void autonomous(void) {
   // Initialize devices
   intake.setVelocity(100, pct);
   flywheel.setVelocity(100, pct);
-  stringLauncher1.set(0);
-  stringLauncher2.set(0);
+  stringLauncher.set(0);
   
   if (autonToRun == 1) {
     // Left side (AWP) match autonomous (centered width-align, front length-align)
@@ -267,29 +265,32 @@ void autonomous(void) {
     /* Skills autonomous (left side, left width-align, front length-align)
     (91 points: 40 (roller) + 12 (bot) + 39 (string launcher) */
     driveBackward(6, 20, pct);
-    intake.spinFor(forward, 300, degrees);
+    intake.spinFor(forward, 330, degrees, false);
+    wait(1.5, sec);
     driveForward(19, 20, pct);
     turnRight(83, 10);
     driveBackward(25, 20, pct);
-    intake.spinFor(forward, 330, degrees);
+    intake.spinFor(forward, 330, degrees, false);
+    wait(1.5, sec);
     driveForward(22.25, 20, pct);
     turnLeft(47, 10);
 
     driveForward(250, 20, pct);
     driveBackward(5, 20, pct);
     turnRight(173, 10);
-    driveBackward(25, 20, pct);
-    intake.spinFor(forward, 300, degrees);
+    driveBackward(23.5, 20, pct); // Decreased 1.5" -- working
+    intake.spinFor(forward, 330, degrees, false);
+    wait(1.5, sec);
     driveForward(22, 20, pct);
-    turnRight(263, 10);
-    driveBackward(22.5, 20, pct);
-    intake.spinFor(forward, 300, degrees);
+    turnRight(262, 10);
+    driveBackward(23, 20, pct); // Increased .5"
+    intake.spinFor(forward, 330, degrees, false);
+    wait(1.5, sec);
     driveForward(24, 20, pct);
     turnLeft(227, 10);
     driveBackward(15, 20, pct);
     
-    stringLauncher1.set(1);
-    stringLauncher2.set(1);
+    //stringLauncher.set(1);
   }
   else {
     // Autonomous to run when no autonomous is selected on brain
@@ -312,8 +313,7 @@ void usercontrol(void) {
   // User control code
   enabledrivePID = false;
   
-  stringLauncher1.set(0);
-  stringLauncher2.set(0);
+  stringLauncher.set(0);
   bool launchString = true;
   
   while (1) {
@@ -340,14 +340,12 @@ void usercontrol(void) {
     // String Launcher Piston
     if (controller2.ButtonA.pressing()) {
       if (launchString) {
-        stringLauncher1.set(1);
-        stringLauncher2.set(1);
+        stringLauncher.set(1);
         launchString = false;
         wait(500, msec);
       }
       else {
-        stringLauncher1.set(0);
-        stringLauncher2.set(0);
+        stringLauncher.set(0);
         launchString = true;
         wait(500, msec);
       }
