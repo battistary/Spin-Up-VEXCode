@@ -265,13 +265,14 @@ void autonomous(void) {
     /* Skills autonomous (left side, left width-align, front length-align)
     (91 points: 40 (roller) + 12 (bot) + 39 (string launcher) */
     driveBackward(6, 20, pct);
-    intake.spinFor(forward, 330, degrees, false);
+    intake.spinFor(forward, 330, degrees, false); // Failsafe on first roller
     wait(1.5, sec);
     driveForward(19, 20, pct);
     turnRight(83, 10);
     driveBackward(25, 20, pct);
-    intake.spinFor(forward, 330, degrees, false);
-    wait(1.5, sec);
+    intake.spinFor(forward, 330, degrees, true);
+    //intake.spinFor(forward, 330, degrees, false); // No failsafe on second roller
+    //wait(1.5, sec);
     driveForward(22.25, 20, pct);
     turnLeft(48, 10); // Increased 1* - bot veered to left on diagonal
 
@@ -279,13 +280,15 @@ void autonomous(void) {
     driveBackward(5, 20, pct);
     turnRight(173, 10);
     driveBackward(23.5, 20, pct);
-    intake.spinFor(forward, 330, degrees, false);
-    wait(1.5, sec);
+    intake.spinFor(forward, 330, degrees, true);
+    //intake.spinFor(forward, 330, degrees, false); // No failsafe on third roller
+    //wait(1.5, sec);
     driveForward(22, 20, pct);
     turnRight(262, 10);
     driveBackward(23, 20, pct);
-    intake.spinFor(forward, 330, degrees, false);
-    wait(1.5, sec);
+    intake.spinFor(forward, 330, degrees, true);
+    //intake.spinFor(forward, 330, degrees, false); // No failsafe on fourth roller
+    //wait(1.5, sec);
     driveForward(24, 20, pct);
     turnLeft(227, 10);
     driveBackward(15, 20, pct);
