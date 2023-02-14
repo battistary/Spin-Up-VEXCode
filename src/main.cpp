@@ -334,7 +334,7 @@ void usercontrol(void) {
 
     // Flywheel
     if (controller1.ButtonR1.pressing()){
-      flywheel.spin(forward, 11, volt);
+      flywheel.spin(forward, 9.3, volt);
     }
     else {
       flywheel.stop();
