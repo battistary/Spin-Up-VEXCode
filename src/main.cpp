@@ -31,7 +31,7 @@ void pre_auton(void) {
   vexcodeInit();
   inertialSensor.calibrate();
 
-  Brain.Screen.drawImageFromFile("brain_logo.png", 0, 0);
+  Brain.Screen.drawImageFromFile("logo_stretched.png", 0, 0);
 
   leftEncoder.setPosition(0, degrees);
   rightEncoder.setPosition(0, degrees);
@@ -323,10 +323,10 @@ void usercontrol(void) {
     // Define button press actions
     // Intake / Roller-Roller
     if (controller1.ButtonL1.pressing()){
-      intake.spin(reverse, 11.8, volt);
+      intake.spin(reverse, 12, volt);
     }
     else if (controller1.ButtonL2.pressing()){
-      intake.spin(forward, 11.8, volt);
+      intake.spin(forward, 12, volt);
     }
     else {
       intake.stop();
@@ -334,7 +334,7 @@ void usercontrol(void) {
 
     // Flywheel
     if (controller1.ButtonR1.pressing()){
-      flywheel.spin(forward, 9.3, volt);
+      flywheel.spin(forward, 12, volt);
     }
     else {
       flywheel.stop();
@@ -405,7 +405,7 @@ int main() {
       }
     }
     else {
-      Brain.Screen.drawImageFromFile("brain_logo.png", 0, 0);
+      Brain.Screen.drawImageFromFile("logo_stretched.png", 0, 0);
     }
     
     wait(100, msec);
