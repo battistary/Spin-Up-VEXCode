@@ -1,2 +1,2 @@
 # Spin-Up
-9909Y Wyvern 2022-2023 VEX Spin Up code
+9909Y Wyvern 2022-2023 VEX Spin Up Legacy VEXCode
